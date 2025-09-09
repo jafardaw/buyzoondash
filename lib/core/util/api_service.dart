@@ -9,8 +9,7 @@ class ApiService {
   ApiService()
     : _dio = Dio(
         BaseOptions(
-          baseUrl:
-              'https://corsproxy.io/?https://backendbuyzoon.fawruneg.com/public',
+          baseUrl: 'https://backendbuyzoon.fawruneg.com/',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
