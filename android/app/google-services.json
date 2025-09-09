@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "549673357963",
+    "project_id": "buyzoondash",
+    "storage_bucket": "buyzoondash.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549673357963:android:9675b5d5e0b94dac3d3a8e",
+        "android_client_info": {
+          "package_name": "com.example.buyzoonapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNp1MSc99YRRE3bg5NQci5hnePbL2oMO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

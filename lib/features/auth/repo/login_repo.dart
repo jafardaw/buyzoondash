@@ -67,7 +67,7 @@ class LoginRepo {
     required String password,
   }) async {
     try {
-      final response = await _apiService.post('/api/auth/login/', {
+      final response = await _apiService.post('/api/admin/login', {
         "username_or_phone": usernameOrPhone,
         "password": password,
       });
@@ -82,17 +82,14 @@ class LoginRepo {
         }
         return LoginModel.fromJson(data['data']);
       } else {
-        // إلقاء استثناء إذا كان الـ status هو false
         throw Exception(data['message'] ?? 'Failed to log in.');
       }
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException caught: ${e.message}');
       }
-      // إلقاء الاستثناء المخصص مباشرةً
       throw ErrorHandler.handleDioError(e);
     } catch (e) {
-      // هذه الكتلة تلتقط الأخطاء الأخرى مثل Exception من الـ else بلوك
       if (kDebugMode) {
         print('General Exception caught: $e');
       }

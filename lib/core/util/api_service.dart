@@ -6,18 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   final Dio _dio;
 
-  ApiService()
+  ApiService(Dio dio)
     : _dio = Dio(
         BaseOptions(
-          baseUrl:
-              'https://corsproxy.io/?https://backendbuyzoon.fawruneg.com/public',
+          baseUrl: 'https://backendbuyzoon.fawruneg.com',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers':
-                'Origin, Content-Type, X-Auth-Token, Authorization',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            // 'Access-Control-Allow-Headers':
+            //     'Origin, Content-Type, X-Auth-Token, Authorization',
           },
           connectTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
@@ -39,7 +38,8 @@ class ApiService {
             final prefs = await SharedPreferences.getInstance();
             final token = prefs.getString('token');
             if (token != null) {
-              options.headers['Authorization'] = 'Bearer $token';
+              options.headers['Authorization'] =
+                  'Bearer 16|arSsFTJb4jABFya0XMvVULVlEFzKUcCOdkq9DvAf22f45993';
             }
           } catch (e) {
             if (kDebugMode) {

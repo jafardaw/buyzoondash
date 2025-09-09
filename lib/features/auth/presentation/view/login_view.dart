@@ -8,6 +8,7 @@ import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_cubit.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_state.dart';
 import 'package:buyzoonapp/features/auth/repo/login_repo.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(LoginRepo(ApiService())),
+      create: (context) => LoginCubit(LoginRepo(ApiService(Dio()))),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: LoginViewBody(
