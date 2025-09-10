@@ -9,7 +9,7 @@ class ApiService {
   ApiService(Dio dio)
     : _dio = Dio(
         BaseOptions(
-          baseUrl: 'https://backendbuyzoon.fawruneg.com',
+          baseUrl: 'https://backendbuyzoon.fawruneg.com/',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
