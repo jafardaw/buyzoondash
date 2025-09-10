@@ -1,6 +1,5 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
-import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
@@ -8,6 +7,8 @@ import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:buyzoonapp/core/util/api_service.dart';
 
 class AddProductTypeScreen extends StatefulWidget {
   const AddProductTypeScreen({super.key});
@@ -28,20 +29,12 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
         appBar: AppBar(
           title: const Text(
             'إضافة نوع منتج',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.deepPurple,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
         ),
         body: BlocListener<ProductTypeCubit, ProductTypeState>(
           listener: (context, state) {
@@ -67,68 +60,61 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
             }
           },
           child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(color: Palette.backgroundColor),
-            child: SafeArea(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.deepPurple, Colors.purpleAccent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 20),
-                      // صورة رمزية
-                      ClipOval(
+                      // الصورة
+                      ClipRRect(
                         child: Image.asset(
                           height: 250,
                           width: 250,
                           'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
-                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Icon(
-                              Icons.category,
-                              size: 70,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              Icons.add_circle,
+                              size: 80,
+                              color: Colors.white.withOpacity(0.7),
                             );
                           },
                         ),
                       ),
-                      const SizedBox(height: 40),
-                      // حقل إدخال الاسم
+                      const SizedBox(height: 10),
+                      // حقل الإدخال
                       Card(
-                        elevation: 10,
+                        elevation: 7,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        color: Colors.white.withValues(alpha: 0.95),
-                        shadowColor: Colors.deepPurple.withValues(alpha: 0.5),
+                        color: Colors.white.withOpacity(0.9),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
-                            vertical: 15,
+                            vertical: 10,
                           ),
                           child: CustomTextField(
                             controller: _nameController,
                             labelText: 'اسم نوع المنتج',
-                            hintText: 'أدخل اسم نوع المنتج هنا',
+                            hintText: 'ادخل اسم النوع هنا',
                             labelStyle: TextStyle(
-                              color: Colors.deepPurple[800],
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              color: Colors.deepPurple[700],
                             ),
-                            hintStyle: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 14,
-                            ),
+                            hintStyle: TextStyle(color: Colors.grey[500]),
                             prefixIcon: Icon(
-                              Icons.category_rounded,
+                              Icons.category,
                               color: Palette.secandry,
-                              size: 24,
                             ),
-
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'الرجاء إدخال اسم نوع المنتج';
@@ -144,10 +130,7 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
                         builder: (context, state) {
                           if (state is AddProductTypeLoading) {
                             return const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                              strokeWidth: 3,
+                              color: Colors.white,
                             );
                           }
                           return CustomButton(
@@ -158,11 +141,10 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
                                 );
                               }
                             },
-                            text: 'إضافة نوع المنتج',
+                            text: 'إضافة',
                           );
                         },
                       ),
-                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

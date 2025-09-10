@@ -30,4 +30,32 @@ class ProductTypeCubit extends Cubit<ProductTypeState> {
       emit(ProductTypeFailure(e.toString()));
     }
   }
+
+  Future<void> updateProductType({
+    required int id,
+    required String name,
+  }) async {
+    emit(UpdateProductTypeLoading());
+    try {
+      final message = await _productTypeRepo.updateProductType(
+        id: id,
+        name: name,
+      );
+      emit(UpdateProductTypeSuccess(message));
+    } catch (e) {
+      emit(UpdateProductTypeFailure(e.toString()));
+    }
+  }
+
+  Future<void> deleteProductType({required int id}) async {
+    emit(DeleteProductTypeLoading());
+    try {
+      final message = await _productTypeRepo.deleteProductType(id: id);
+      emit(DeleteProductTypeSuccess(message));
+      // يمكنك أيضاً استدعاء getProductTypes() هنا لتحديث القائمة بعد الحذف
+      // await getProductTypes();
+    } catch (e) {
+      emit(DeleteProductTypeFailure(e.toString()));
+    }
+  }
 }

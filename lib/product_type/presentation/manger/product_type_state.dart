@@ -7,8 +7,9 @@ class AddProductTypeInitial extends ProductTypeState {}
 class AddProductTypeLoading extends ProductTypeState {}
 
 class AddProductTypeSuccess extends ProductTypeState {
-  final List<ProductTypeModel> productTypes;
-  AddProductTypeSuccess(this.productTypes);
+  // final List<ProductTypeModel> productTypes;
+  final String message;
+  AddProductTypeSuccess(this.message);
 }
 
 class AddProductTypeFailure extends ProductTypeState {
@@ -26,4 +27,28 @@ class ProductTypeSuccess extends ProductTypeState {
 class ProductTypeFailure extends ProductTypeState {
   final String error;
   ProductTypeFailure(this.error);
+}
+
+class UpdateProductTypeLoading extends ProductTypeState {}
+
+class UpdateProductTypeSuccess extends ProductTypeState {
+  final String message;
+  UpdateProductTypeSuccess(this.message);
+}
+
+class UpdateProductTypeFailure extends ProductTypeState {
+  final String error;
+  UpdateProductTypeFailure(this.error);
+}
+
+class DeleteProductTypeLoading extends ProductTypeState {}
+
+class DeleteProductTypeSuccess extends ProductTypeState {
+  final String message;
+  DeleteProductTypeSuccess(this.message);
+}
+
+class DeleteProductTypeFailure extends ProductTypeState {
+  final String error;
+  DeleteProductTypeFailure(this.error);
 }

@@ -49,6 +49,5 @@ flutter {
 }
 
 dependencies {
-    // هذا السطر الصحيح لإضافة مكتبة desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

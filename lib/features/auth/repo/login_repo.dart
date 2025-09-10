@@ -67,7 +67,7 @@ class LoginRepo {
     required String password,
   }) async {
     try {
-      final response = await _apiService.post('api/auth/login', {
+      final response = await _apiService.post('api/admin/login', {
         "username_or_phone": usernameOrPhone,
         "password": password,
       });

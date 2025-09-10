@@ -9,7 +9,7 @@ class ApiService {
   ApiService(Dio dio)
     : _dio = Dio(
         BaseOptions(
-          baseUrl: 'https://backendbuyzoon.fawruneg.com/',
+          baseUrl: 'https://backendbuyzoon.fawruneg.com/public/',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -38,8 +38,7 @@ class ApiService {
             final prefs = await SharedPreferences.getInstance();
             final token = prefs.getString('token');
             if (token != null) {
-              options.headers['Authorization'] =
-                  'Bearer 16|arSsFTJb4jABFya0XMvVULVlEFzKUcCOdkq9DvAf22f45993';
+              options.headers['Authorization'] = 'Bearer $token';
             }
           } catch (e) {
             if (kDebugMode) {
@@ -117,11 +116,7 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      return await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-      );
+      return await _dio.put(path, data: data, queryParameters: queryParameters);
     } on DioException catch (e) {
       throw ErrorHandler.handleDioError(e);
     }
