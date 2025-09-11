@@ -12,7 +12,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width < 600 ? 100 : 150,
+        horizontal: MediaQuery.of(context).size.width < 600 ? 60 : 150,
       ),
       child: Material(
         borderRadius: BorderRadius.circular(20),
