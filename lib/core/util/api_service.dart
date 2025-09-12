@@ -6,17 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   final Dio _dio;
 
-  ApiService()
+  ApiService(Dio dio)
     : _dio = Dio(
         BaseOptions(
-          baseUrl: 'https://backendbuyzoon.fawruneg.com/',
+          baseUrl: 'https://backendbuyzoon.fawruneg.com/public/',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers':
-                'Origin, Content-Type, X-Auth-Token, Authorization',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            // 'Access-Control-Allow-Headers':
+            //     'Origin, Content-Type, X-Auth-Token, Authorization',
           },
           connectTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
@@ -116,11 +116,7 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      return await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-      );
+      return await _dio.put(path, data: data, queryParameters: queryParameters);
     } on DioException catch (e) {
       throw ErrorHandler.handleDioError(e);
     }

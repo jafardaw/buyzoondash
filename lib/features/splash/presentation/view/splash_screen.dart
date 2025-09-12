@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
+import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
+import 'package:buyzoonapp/product_type/presentation/view/update_product_typ_view.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,11 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Timer(const Duration(seconds: 4), () {
       AppRoutes.pushNamed(context, AppRoutes.login);
-      // Navigator.of(context).pushReplacement(
+      // Navigator.of(context).push(
       //   MaterialPageRoute(
-      //     builder:
-      //         (context) =>
-      //             const LoginPage(), // Replace with your main screen widget
+      //     builder: (context) =>
+      //         ProductTypesScreen(), // Replace with your main screen widget
       //   ),
       // );
     });

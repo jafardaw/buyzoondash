@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
@@ -8,6 +9,8 @@ import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_cubit.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_state.dart';
 import 'package:buyzoonapp/features/auth/repo/login_repo.dart';
+import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(LoginRepo(ApiService())),
+      create: (context) => LoginCubit(LoginRepo(ApiService(Dio()))),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: LoginViewBody(
@@ -135,6 +138,13 @@ class LoginViewBody extends StatelessWidget {
               BlocConsumer<LoginCubit, LoginState>(
                 listener: (context, state) {
                   if (state is LoginSuccess) {
+                    // AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductTypesScreen(),
+                      ),
+                    );
                     showCustomSnackBar(
                       context,
                       'تم تسجيل الدخول بنجاح',

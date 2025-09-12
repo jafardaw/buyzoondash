@@ -1,6 +1,8 @@
 import 'package:buyzoonapp/features/auth/presentation/view/login_view.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
 import 'package:buyzoonapp/features/splash/presentation/view/splash_screen.dart';
+import 'package:buyzoonapp/product_type/presentation/view/add_product_type_view.dart';
+import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +14,7 @@ class AppRoutes {
   static const String login = '/login_view';
   static const String rootView = '/root_view';
   static const String dashboardView = '/dashboard_view';
+  static const String addproducttypeview = '/add_product_type_view';
 
   static GoRouter get router => _router;
 
@@ -27,6 +30,11 @@ class AppRoutes {
         path: login,
         name: login,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: addproducttypeview,
+        name: addproducttypeview,
+        builder: (context, state) => const AddProductTypeScreen(),
       ),
     ],
   );
