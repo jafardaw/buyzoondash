@@ -6,7 +6,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/add_new_product_state.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_state.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:flutter/material.dart';
@@ -84,154 +84,146 @@ class _AddNewProductState extends State<AddNewProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          AddProductCubit(AddProductRepository(ApiService(Dio()))),
-      child: Scaffold(
-        appBar: const AppareWidget(
-          automaticallyImplyLeading: true,
-          title: 'إضافة منتج جديد',
-        ),
-        body: BlocListener<AddProductCubit, AddProductState>(
-          listener: (context, state) {
-            if (state is AddProductSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('تم إضافة المنتج بنجاح!'),
-                  backgroundColor: Palette.primary,
+    return Scaffold(
+      appBar: const AppareWidget(
+        automaticallyImplyLeading: true,
+        title: 'إضافة منتج جديد',
+      ),
+      body: BlocListener<AddProductCubit, AddProductState>(
+        listener: (context, state) {
+          if (state is AddProductSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تم إضافة المنتج بنجاح!'),
+                backgroundColor: Palette.primary,
+              ),
+            );
+            Navigator.pop(context);
+          } else if (state is AddProductFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: Palette.error,
+              ),
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomTextField(
+                  label: const Text('الاسم'),
+                  hintText: 'مثال: هاتف ذكي سامسونج',
+                  controller: nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال اسم المنتج';
+                    }
+                    return null;
+                  },
                 ),
-              );
-            } else if (state is AddProductFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage),
-                  backgroundColor: Palette.error,
+                const SizedBox(height: 24),
+                CustomTextField(
+                  label: const Text('الوصف'),
+                  hintText: 'وصف مفصل عن المنتج',
+                  controller: descriptionController,
+                  maxLines: 4,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال الوصف';
+                    }
+                    return null;
+                  },
                 ),
-              );
-            }
-          },
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 16.0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CustomTextField(
-                    label: const Text('الاسم'),
-                    hintText: 'مثال: هاتف ذكي سامسونج',
-                    controller: nameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال اسم المنتج';
-                      }
-                      return null;
-                    },
+                const SizedBox(height: 24),
+                CustomTextField(
+                  label: const Text('السعر'),
+                  hintText: 'مثال: 1200.50',
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال السعر';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'الرجاء إدخال رقم صحيح';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'التقييم (من 1 إلى 5)',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 24),
-                  CustomTextField(
-                    label: const Text('الوصف'),
-                    hintText: 'وصف مفصل عن المنتج',
-                    controller: descriptionController,
-                    maxLines: 4,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال الوصف';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  CustomTextField(
-                    label: const Text('السعر'),
-                    hintText: 'مثال: 1200.50',
-                    controller: priceController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال السعر';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'الرجاء إدخال رقم صحيح';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'التقييم (من 1 إلى 5)',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Center(
-                    child: RatingBar.builder(
-                      initialRating: _rating,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 32.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) =>
-                          const Icon(Icons.star, color: Colors.amber),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          _rating = rating;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  const SizedBox(height: 24),
-                  CustomTextField(
-                    label: const Text('نسبة الاسترجاع'),
-                    hintText: 'مثال: 15.0',
-                    controller: refundRateController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال نسبة الاسترجاع';
-                      }
-                      final rate = double.tryParse(value);
-                      if (rate == null || rate < 0 || rate > 100) {
-                        return 'الرجاء إدخال نسبة بين 0 و 100';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  MultiImagePickerWidget(
-                    onImagesSelected: (bytesList, namesList) {
+                ),
+                const SizedBox(height: 12),
+                Center(
+                  child: RatingBar.builder(
+                    initialRating: _rating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 32.0,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) =>
+                        const Icon(Icons.star, color: Colors.amber),
+                    onRatingUpdate: (rating) {
                       setState(() {
-                        _selectedImagesBytes = bytesList;
-                        _selectedImagesNames = namesList;
+                        _rating = rating;
                       });
                     },
                   ),
-                  const SizedBox(height: 8),
-                  // هنا يتم التعديل على الزر
-                  BlocBuilder<AddProductCubit, AddProductState>(
-                    builder: (blocContext, state) {
-                      bool isLoading = state is AddProductLoading;
-                      return CustomButton(
-                        onTap: isLoading
-                            ? () {}
-                            : () => _submitForm(blocContext),
-                        text: isLoading ? 'جاري الحفظ...' : 'حفظ المنتج',
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 80),
-                ],
-              ),
+                ),
+                const SizedBox(height: 24),
+
+                const SizedBox(height: 24),
+                CustomTextField(
+                  label: const Text('نسبة الاسترجاع'),
+                  hintText: 'مثال: 15.0',
+                  controller: refundRateController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال نسبة الاسترجاع';
+                    }
+                    final rate = double.tryParse(value);
+                    if (rate == null || rate < 0 || rate > 100) {
+                      return 'الرجاء إدخال نسبة بين 0 و 100';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+                MultiImagePickerWidget(
+                  onImagesSelected: (bytesList, namesList) {
+                    setState(() {
+                      _selectedImagesBytes = bytesList;
+                      _selectedImagesNames = namesList;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                // هنا يتم التعديل على الزر
+                BlocBuilder<AddProductCubit, AddProductState>(
+                  builder: (blocContext, state) {
+                    bool isLoading = state is AddProductLoading;
+                    return CustomButton(
+                      onTap: isLoading ? () {} : () => _submitForm(blocContext),
+                      text: isLoading ? 'جاري الحفظ...' : 'حفظ المنتج',
+                    );
+                  },
+                ),
+                const SizedBox(height: 80),
+              ],
             ),
           ),
         ),

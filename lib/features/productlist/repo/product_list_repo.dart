@@ -71,4 +71,50 @@ class AddProductRepository {
       rethrow;
     }
   }
+
+  Future<void> updateProduct({
+    required int productId,
+    required String name,
+    required String description,
+    required double price,
+    required double rating,
+    required double refundRate,
+    List<int>? photosToDelete,
+    List<Uint8List>? newPhotos,
+  }) async {
+    try {
+      Map<String, dynamic> data = {
+        '_method': 'PUT',
+        'name': name,
+        'description': description,
+        'price': price,
+        'rating': rating,
+        'refund_rate': refundRate,
+      };
+
+      // إضافة الصور التي سيتم حذفها كقائمة
+      if (photosToDelete != null && photosToDelete.isNotEmpty) {
+        data['remove_photos[]'] = photosToDelete;
+      }
+
+      // إضافة الصور الجديدة
+      if (newPhotos != null && newPhotos.isNotEmpty) {
+        List<MultipartFile> imageFiles = [];
+        for (int i = 0; i < newPhotos.length; i++) {
+          imageFiles.add(
+            MultipartFile.fromBytes(newPhotos[i], filename: 'image_$i.jpg'),
+          );
+        }
+        data['photos[]'] = imageFiles;
+      }
+
+      final formData = FormData.fromMap(data);
+
+      await apiService.post('api/products/$productId', formData);
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioError(e);
+    } catch (e) {
+      throw Exception('An unexpected error occurred: $e');
+    }
+  }
 }

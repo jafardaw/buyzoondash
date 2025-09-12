@@ -16,9 +16,13 @@ class LoginRepo {
     required String password,
   }) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       final String? fcmToken = prefs.getString('fcm_token');
 
+      if (kDebugMode) {
+        print('FCM Token from SharedPreferences: $fcmToken');
+      }
+      print("asssssssssssssssssssssssssssssssssssssssssssasaf$fcmToken");
       final response = await _apiService.post('api/admin/login', {
         "username_or_phone": usernameOrPhone,
         "password": password,

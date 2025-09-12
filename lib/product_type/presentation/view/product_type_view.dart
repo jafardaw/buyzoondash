@@ -2,11 +2,14 @@ import 'package:buyzoonapp/core/func/calculat_cross_axis_count.dart';
 import 'package:buyzoonapp/core/func/float_action_button.dart';
 import 'package:buyzoonapp/core/func/show_menu.dart';
 import 'package:buyzoonapp/core/style/color.dart';
+import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/product_list_view.dart';
+import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});

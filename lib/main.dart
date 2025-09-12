@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/get_cubit/get_all_poduct_cubit.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/firebase_options.dart';
 import 'package:buyzoonapp/notifaction_local.dart';
@@ -18,9 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await initializeLocalNotifications();
+  await initializeLocalNotifications();
 
-  // await setupNotifications();
+  await setupNotifications();
   runApp(const MyApp());
 }
 
@@ -31,6 +32,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ProductsCubit>(
+          create: (context) =>
+              ProductsCubit(AddProductRepository(ApiService())),
+        ),
+        BlocProvider<AddProductCubit>(
+          create: (context) =>
+              AddProductCubit(AddProductRepository(ApiService())),
+        ),
         BlocProvider<GetProductTypeCubit>(
           create: (context) =>
               GetProductTypeCubit(ProductTypeRepo(ApiService()))

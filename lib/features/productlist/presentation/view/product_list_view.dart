@@ -5,30 +5,44 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/features/productlist/data/product_list_model.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_state.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/get_cubit/get_all_poduct_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/get_cubit/get_all_poduct_state.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/updatecubit/update_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/update_product_view.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ProductsScreen extends StatelessWidget {
+class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key, required this.id});
   final int id;
 
   @override
+  State<ProductsScreen> createState() => _ProductsScreenState();
+}
+
+class _ProductsScreenState extends State<ProductsScreen> {
+  @override
+  initState() {
+    super.initState();
+    // Fetch all batches when the page is initialized
+    context.read<ProductsCubit>().getAllProducts(widget.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ProductsCubit(AddProductRepository(ApiService(Dio())))
-            ..getAllProducts(2),
-      child: Scaffold(
-        appBar: AppareWidget(
-          automaticallyImplyLeading: true,
-          title: 'المنتجات',
-        ),
-        body: BlocBuilder<ProductsCubit, ProductsState>(
+    return Scaffold(
+      appBar: AppareWidget(automaticallyImplyLeading: true, title: 'المنتجات'),
+      body: BlocListener<AddProductCubit, AddProductState>(
+        listener: (context, state) {
+          if (state is AddProductSuccess) {
+            context.read<ProductsCubit>().getAllProducts(widget.id);
+          }
+        },
+        child: BlocBuilder<ProductsCubit, ProductsState>(
           builder: (context, state) {
             if (state is ProductsLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -46,11 +60,19 @@ class ProductsScreen extends StatelessWidget {
                   return CardProduct(
                     product: product,
                     onEdit: () {
-                      // TODO: Implement navigation to edit screen or show edit dialog
-                      print('Edit product: ${product.name}');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => UpdateProductCubit(
+                              AddProductRepository(ApiService()),
+                            ),
+                            child: UpdateProductView(productModel: product),
+                          ),
+                        ),
+                      );
                     },
                     onDelete: () {
-                      // TODO: Implement delete confirmation and API call
                       print('Delete product: ${product.name}');
                     },
                   );
@@ -68,16 +90,16 @@ class ProductsScreen extends StatelessWidget {
             }
           },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: buildFloatactionBoutton(
-          context,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddNewProduct(id: 2)),
-            );
-          },
-        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: buildFloatactionBoutton(
+        context,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewProduct(id: 2)),
+          );
+        },
       ),
     );
   }

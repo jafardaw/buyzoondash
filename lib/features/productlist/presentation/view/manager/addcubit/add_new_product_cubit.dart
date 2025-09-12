@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/add_new_product_state.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_state.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
