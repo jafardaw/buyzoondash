@@ -1,7 +1,6 @@
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/firebase_options.dart';
-import 'package:buyzoonapp/notifaction_local.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';

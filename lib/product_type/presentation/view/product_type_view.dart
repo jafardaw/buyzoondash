@@ -10,13 +10,10 @@ import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
-import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/product_type/data/model/product_type_model.dart';
-import 'package:buyzoonapp/product_type/presentation/manger/update_product_type_cubit.dart';
 
 class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});
@@ -28,29 +25,7 @@ class ProductTypesScreen extends StatefulWidget {
 class _ProductTypesScreenState extends State<ProductTypesScreen> {
   @override
   Widget build(BuildContext context) {
-    return
-    // MultiBlocProvider(
-    //   providers: [
-    //     BlocProvider<GetProductTypeCubit>(
-    //       create: (context) =>
-    //           GetProductTypeCubit(ProductTypeRepo(ApiService()))
-    //             ..getProductTypes(),
-    //     ),
-    //     BlocProvider<DeleteProductTypeCubit>(
-    //       create: (context) =>
-    //           DeleteProductTypeCubit(ProductTypeRepo(ApiService())),
-    //     ),
-    //     // Add AddProductTypeCubit and UpdateProductTypeCubit here to make them available
-    //     BlocProvider<AddProductTypeCubit>(
-    //       create: (context) =>
-    //           AddProductTypeCubit(ProductTypeRepo(ApiService())),
-    //     ),
-    //     BlocProvider<UpdateProductTypeCubit>(
-    //       create: (context) =>
-    //           UpdateProductTypeCubit(ProductTypeRepo(ApiService())),
-    //     ),
-    //   ],
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text(
           'أنواع المنتجات',
@@ -153,7 +128,9 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
             );
           } else if (state is GetProductTypeFailure) {
             return Center(
-              child: ShowErrorWidget.fullScreenError(errorMessage: state.error),
+              child: ShowErrorWidgetView.fullScreenError(
+                errorMessage: state.error,
+              ),
             );
           }
           return const SizedBox.shrink();

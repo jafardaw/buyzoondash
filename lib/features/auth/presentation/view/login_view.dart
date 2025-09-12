@@ -9,8 +9,8 @@ import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_cubit.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_state.dart';
 import 'package:buyzoonapp/features/auth/repo/login_repo.dart';
-import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
-import 'package:dio/dio.dart';
+import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
+import 'package:buyzoonapp/features/users/presentation/view/users_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -141,7 +141,7 @@ class LoginViewBody extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductTypesScreen(),
+                        builder: (context) => BroadcastNotificationScreen(),
                       ),
                     );
                     showCustomSnackBar(
@@ -162,7 +162,7 @@ class LoginViewBody extends StatelessWidget {
                     return LoadingViewWidget();
                   }
                   if (state is LoginFailure) {
-                    return ShowErrorWidget.inlineError(
+                    return ShowErrorWidgetView.inlineError(
                       errorMessage: state.error,
                       onRetry: () {
                         context.read<LoginCubit>().login(
