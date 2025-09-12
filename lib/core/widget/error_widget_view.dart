@@ -2,13 +2,13 @@ import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:flutter/material.dart';
 
-class ShowErrorWidget extends StatelessWidget {
+class ShowErrorWidgetView extends StatelessWidget {
   final String errorMessage;
   final VoidCallback? onRetry;
   final bool showRetryButton;
   final bool showImage;
 
-  const ShowErrorWidget({
+  const ShowErrorWidgetView({
     super.key,
     required this.errorMessage,
     this.onRetry,
@@ -67,7 +67,7 @@ class ShowErrorWidget extends StatelessWidget {
     bool showImage = true,
   }) {
     return Scaffold(
-      body: ShowErrorWidget(
+      body: ShowErrorWidgetView(
         errorMessage: errorMessage,
         onRetry: onRetry,
         showImage: showImage,
@@ -81,7 +81,7 @@ class ShowErrorWidget extends StatelessWidget {
     VoidCallback? onRetry,
     bool showImage = false,
   }) {
-    return ShowErrorWidget(
+    return ShowErrorWidgetView(
       errorMessage: errorMessage,
       onRetry: onRetry,
       showImage: showImage,

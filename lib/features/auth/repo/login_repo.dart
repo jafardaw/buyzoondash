@@ -22,11 +22,11 @@ class LoginRepo {
       if (kDebugMode) {
         print('FCM Token from SharedPreferences: $fcmToken');
       }
-      print("asssssssssssssssssssssssssssssssssssssssssssasaf$fcmToken");
       final response = await _apiService.post('api/admin/login', {
         "username_or_phone": usernameOrPhone,
         "password": password,
-        "fcm_token": fcmToken,
+        "fcm_token":
+            "fw8qlzt-Te22Dh5tz7jhLF:APA91bGrZ0SIUDaZ1DSkZmjJGYCJAZtCXWc6pWnhBLUXglUxf0sM5FkCPXDLhNOkByyyRzrcQcJVUwYpLJ-cDA4VYJANp60ZQRwLHo5E3lK3slEdkJ2aBYc",
       });
 
       final data = response.data;

@@ -4,12 +4,24 @@ import 'package:buyzoonapp/core/func/show_menu.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
+<<<<<<< HEAD
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/product_list_view.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+=======
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/product_type/data/model/product_type_model.dart';
+>>>>>>> 8dde4023b03c44fe9ca52dd155cd4cc1df643d1e
 
 class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});
@@ -21,12 +33,25 @@ class ProductTypesScreen extends StatefulWidget {
 class _ProductTypesScreenState extends State<ProductTypesScreen> {
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     // تعريف قائمة العناصر التي سيتم عرضها
 
     return Scaffold(
       appBar: AppareWidget(
         title: 'أنواع المنتجات',
         automaticallyImplyLeading: true,
+=======
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'أنواع المنتجات',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        elevation: 0,
+        leading: const BackButton(color: Colors.white),
+>>>>>>> 8dde4023b03c44fe9ca52dd155cd4cc1df643d1e
       ),
       body: const ProductTypeBodyView(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -45,6 +70,7 @@ class ProductTypeBodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: 10, // عدد وهمي للعناصر
@@ -53,6 +79,85 @@ class ProductTypeBodyView extends StatelessWidget {
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
         childAspectRatio: 1.0, // لجعل العناصر مربعة
+=======
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AddProductTypeCubit, AddProductTypeState>(
+          listener: (context, state) {
+            if (state is AddProductTypeSuccess) {
+              showCustomSnackBar(
+                context,
+                'تمت الإضافة بنجاح',
+                color: Palette.success,
+              );
+              // context.read<GetProductTypeCubit>().getProductTypes();
+            } else if (state is AddProductTypeFailure) {
+              showCustomSnackBar(context, state.error, color: Palette.error);
+            }
+          },
+        ),
+        BlocListener<DeleteProductTypeCubit, DeleteProductTypeState>(
+          listener: (context, state) {
+            if (state is DeleteProductTypeSuccess) {
+              showCustomSnackBar(
+                context,
+                state.message,
+                color: Palette.success,
+              );
+              context.read<GetProductTypeCubit>().getProductTypes();
+            } else if (state is DeleteProductTypeFailure) {
+              showCustomSnackBar(context, state.error, color: Palette.error);
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<GetProductTypeCubit, GetProductTypeState>(
+        builder: (context, state) {
+          if (state is GetProductTypeLoading) {
+            return const LoadingViewWidget();
+          } else if (state is GetProductTypeSuccess) {
+            if (state.productTypes.isEmpty) {
+              return EmptyListViews(text: 'لا يوجد انواع منتجات حاليا');
+            }
+            return Stack(
+              children: [
+                GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: state.productTypes.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: calculateCrossAxisCount(context),
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemBuilder: (context, index) {
+                    final productType = state.productTypes[index];
+                    return ProductTypeGridItem(productType: productType);
+                  },
+                ),
+                BlocBuilder<DeleteProductTypeCubit, DeleteProductTypeState>(
+                  builder: (context, deleteState) {
+                    if (deleteState is DeleteProductTypeLoading) {
+                      return Container(
+                        color: Colors.black.withOpacity(0.5),
+                        child: const Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
+            );
+          } else if (state is GetProductTypeFailure) {
+            return Center(
+              child: ShowErrorWidgetView.fullScreenError(
+                errorMessage: state.error,
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+>>>>>>> 8dde4023b03c44fe9ca52dd155cd4cc1df643d1e
       ),
       itemBuilder: (context, index) {
         return ProductTypeGridItem(name: 'تصنيف ${index + 1}', id: index + 1);
