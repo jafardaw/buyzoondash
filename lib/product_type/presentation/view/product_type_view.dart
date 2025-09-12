@@ -8,9 +8,14 @@ import 'package:buyzoonapp/features/productlist/presentation/view/add_new_produc
 import 'package:buyzoonapp/features/productlist/presentation/view/product_list_view.dart';
 import 'package:flutter/material.dart';
 
-class ProductTypesScreen extends StatelessWidget {
+class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});
 
+  @override
+  State<ProductTypesScreen> createState() => _ProductTypesScreenState();
+}
+
+class _ProductTypesScreenState extends State<ProductTypesScreen> {
   @override
   Widget build(BuildContext context) {
     // تعريف قائمة العناصر التي سيتم عرضها

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   final Dio _dio;
 
-  ApiService(Dio dio)
+  ApiService()
     : _dio = Dio(
         BaseOptions(
           baseUrl: 'https://backendbuyzoon.fawruneg.com/public/',

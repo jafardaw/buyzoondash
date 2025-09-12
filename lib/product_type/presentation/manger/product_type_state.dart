@@ -1,54 +1,17 @@
 part of 'product_type_cubit.dart';
 
-abstract class ProductTypeState {}
+abstract class GetProductTypeState {}
 
-class AddProductTypeInitial extends ProductTypeState {}
+class GetProductTypeInitial extends GetProductTypeState {}
 
-class AddProductTypeLoading extends ProductTypeState {}
+class GetProductTypeLoading extends GetProductTypeState {}
 
-class AddProductTypeSuccess extends ProductTypeState {
-  // final List<ProductTypeModel> productTypes;
-  final String message;
-  AddProductTypeSuccess(this.message);
-}
-
-class AddProductTypeFailure extends ProductTypeState {
-  final String error;
-  AddProductTypeFailure(this.error);
-}
-
-class ProductTypeLoading extends ProductTypeState {}
-
-class ProductTypeSuccess extends ProductTypeState {
+class GetProductTypeSuccess extends GetProductTypeState {
   final List<ProductTypeModel> productTypes;
-  ProductTypeSuccess(this.productTypes);
+  GetProductTypeSuccess(this.productTypes);
 }
 
-class ProductTypeFailure extends ProductTypeState {
+class GetProductTypeFailure extends GetProductTypeState {
   final String error;
-  ProductTypeFailure(this.error);
-}
-
-class UpdateProductTypeLoading extends ProductTypeState {}
-
-class UpdateProductTypeSuccess extends ProductTypeState {
-  final String message;
-  UpdateProductTypeSuccess(this.message);
-}
-
-class UpdateProductTypeFailure extends ProductTypeState {
-  final String error;
-  UpdateProductTypeFailure(this.error);
-}
-
-class DeleteProductTypeLoading extends ProductTypeState {}
-
-class DeleteProductTypeSuccess extends ProductTypeState {
-  final String message;
-  DeleteProductTypeSuccess(this.message);
-}
-
-class DeleteProductTypeFailure extends ProductTypeState {
-  final String error;
-  DeleteProductTypeFailure(this.error);
+  GetProductTypeFailure(this.error);
 }
