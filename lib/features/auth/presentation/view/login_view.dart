@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(LoginRepo(ApiService(Dio()))),
+      create: (context) => LoginCubit(LoginRepo(ApiService())),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: LoginViewBody(
@@ -78,14 +78,13 @@ class LoginViewBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Image.asset(
-                  height: 280,
-                  width: 280,
+                  height: 250,
+                  width: 250,
                   'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // تأكد من تعديل المسار حسب موقع صورتك
                   fit: BoxFit.contain,
-                  // لون متناسق مع التصميم
                 ),
               ),
-              // const SizedBox(height: 24),
+
               const Text(
                 'أهلاً بك في BuyZone',
                 style: TextStyle(

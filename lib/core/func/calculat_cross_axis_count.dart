@@ -7,7 +7,7 @@ int calculateCrossAxisCount(BuildContext context) {
   } else if (width > 800) {
     return 6;
   } else if (width > 500) {
-    return 5;
+    return 4;
   } else {
     return 3;
   }

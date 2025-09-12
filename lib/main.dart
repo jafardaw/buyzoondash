@@ -1,8 +1,15 @@
+import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/firebase_options.dart';
 import 'package:buyzoonapp/notifaction_local.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/manger/update_product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -20,21 +27,43 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Splash Screen Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GetProductTypeCubit>(
+          create: (context) =>
+              GetProductTypeCubit(ProductTypeRepo(ApiService()))
+                ..getProductTypes(),
+        ),
+        BlocProvider<DeleteProductTypeCubit>(
+          create: (context) =>
+              DeleteProductTypeCubit(ProductTypeRepo(ApiService())),
+        ),
+        // Add AddProductTypeCubit and UpdateProductTypeCubit here to make them available
+        BlocProvider<AddProductTypeCubit>(
+          create: (context) =>
+              AddProductTypeCubit(ProductTypeRepo(ApiService())),
+        ),
+        BlocProvider<UpdateProductTypeCubit>(
+          create: (context) =>
+              UpdateProductTypeCubit(ProductTypeRepo(ApiService())),
+        ),
       ],
-      supportedLocales: const [
-        Locale('ar'), // دعم اللغة العربية
-        Locale('en'), // دعم اللغة الإنجليزية
-      ],
-      locale: const Locale('ar'),
-      routerConfig: AppRoutes.router,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Splash Screen Demo',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ar'), // دعم اللغة العربية
+          Locale('en'), // دعم اللغة الإنجليزية
+        ],
+        locale: const Locale('ar'),
+        routerConfig: AppRoutes.router,
+      ),
     );
   }
 }

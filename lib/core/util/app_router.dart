@@ -12,8 +12,9 @@ class AppRoutes {
   static const String splash = '/';
   static const String login = '/login_view';
   static const String rootView = '/root_view';
-  static const String dashboardView = '/dashboard_view';
+
   static const String addproducttypeview = '/add_product_type_view';
+  static const String updateproducttypview = '/update_product_typ_view';
 
   static GoRouter get router => _router;
 
@@ -33,6 +34,11 @@ class AppRoutes {
       GoRoute(
         path: addproducttypeview,
         name: addproducttypeview,
+        builder: (context, state) => const AddProductTypeScreen(),
+      ),
+      GoRoute(
+        path: updateproducttypview,
+        name: updateproducttypview,
         builder: (context, state) => const AddProductTypeScreen(),
       ),
     ],
