@@ -1,8 +1,12 @@
+import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/firebase_options.dart';
-import 'package:buyzoonapp/notifaction_local.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -20,21 +24,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Splash Screen Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AddProductCubit(
+            AddProductRepository(
+              ApiService(Dio()),
+            ), // تمرير نفس MarketRepository أو واحد جديد
+          ),
+        ),
       ],
-      supportedLocales: const [
-        Locale('ar'), // دعم اللغة العربية
-        Locale('en'), // دعم اللغة الإنجليزية
-      ],
-      locale: const Locale('ar'),
-      routerConfig: AppRoutes.router,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Splash Screen Demo',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ar'), // دعم اللغة العربية
+          Locale('en'), // دعم اللغة الإنجليزية
+        ],
+        locale: const Locale('ar'),
+        routerConfig: AppRoutes.router,
+      ),
     );
   }
 }

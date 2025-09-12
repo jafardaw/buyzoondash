@@ -1,7 +1,6 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
-import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';

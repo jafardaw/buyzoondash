@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
-import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
-import 'package:buyzoonapp/product_type/presentation/view/update_product_typ_view.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

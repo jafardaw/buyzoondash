@@ -1,8 +1,6 @@
 import 'package:buyzoonapp/features/auth/presentation/view/login_view.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
 import 'package:buyzoonapp/features/splash/presentation/view/splash_screen.dart';
 import 'package:buyzoonapp/product_type/presentation/view/add_product_type_view.dart';
-import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,7 +22,7 @@ class AppRoutes {
       GoRoute(
         path: splash,
         name: splash,
-        builder: (context, state) => const AddNewProduct(),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: login,

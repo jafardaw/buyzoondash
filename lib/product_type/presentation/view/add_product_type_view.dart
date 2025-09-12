@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
@@ -25,23 +26,9 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
     return BlocProvider(
       create: (context) => ProductTypeCubit(ProductTypeRepo(ApiService(Dio()))),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'إضافة نوع منتج',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.deepPurple,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        appBar: AppareWidget(
+          title: 'إضافة نوع منتج',
+          automaticallyImplyLeading: true,
         ),
         body: BlocListener<ProductTypeCubit, ProductTypeState>(
           listener: (context, state) {
