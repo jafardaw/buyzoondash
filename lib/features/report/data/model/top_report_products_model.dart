@@ -12,12 +12,12 @@ class TopReportProductsModel {
     required this.quantity,
     required this.totalSales,
   });
-
   factory TopReportProductsModel.fromJson(Map<String, dynamic> json) {
     return TopReportProductsModel(
       product: ProductReportModel.fromJson(json['product']),
       quantity: json['quantity'] as int,
-      totalSales: json['total_sales'] as double,
+      // *** تم تصحيح هذا السطر ***
+      totalSales: double.parse(json['total_sales'].toString()),
     );
   }
 }

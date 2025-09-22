@@ -3,6 +3,7 @@ import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/ban_users/presentation/view/ban_page.dart';
 
@@ -205,7 +206,12 @@ class UserDetailsScreen extends StatelessWidget {
                 );
               } else if (state is UserDetailsFailure) {
                 return Center(
-                  child: ShowErrorWidget.fullScreenError(
+                  child: ShowErrorWidgetView.fullScreenError(
+                    onRetry: () {
+                      context.read<UserDetailsCubit>().getUserDetails(
+                        userId: userId,
+                      );
+                    },
                     errorMessage: 'خطأ في تحميل البيانات: ${state.error}',
                   ),
                 );
@@ -254,17 +260,3 @@ class UserDetailsScreen extends StatelessWidget {
 }
 
 // Helper class for Error widget (assuming you have this)
-class ShowErrorWidget {
-  static Widget fullScreenError({required String errorMessage}) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error, color: Colors.red, size: 40),
-          const SizedBox(height: 10),
-          Text(errorMessage, style: const TextStyle(color: Colors.red)),
-        ],
-      ),
-    );
-  }
-}

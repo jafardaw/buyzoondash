@@ -6,7 +6,9 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/empty_view_list.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/ban_users/presentation/view/ban_page.dart';
+import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
 import 'package:buyzoonapp/features/users/data/model/user_model.dart';
 import 'package:buyzoonapp/features/users/presentation/manger/delete_user_cubit.dart';
 import 'package:buyzoonapp/features/users/presentation/manger/users_cubit.dart';
@@ -30,9 +32,22 @@ class UsersScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: const AppareWidget(
+        appBar: AppareWidget(
           automaticallyImplyLeading: true,
           title: 'المستخدمون',
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BroadcastNotificationScreen(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.notifications),
+            ),
+          ],
         ),
 
         body: MultiBlocListener(
@@ -89,7 +104,12 @@ class _UsersBodyViewState extends State<UsersBodyView> {
       },
       builder: (context, state) {
         if (state is UsersLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const LoadingViewWidget(
+            type: LoadingType.imageShake,
+            imagePath:
+                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+            size: 200, // حجم الصورة
+          );
         } else if (state is UsersSuccess) {
           if (state.users.isEmpty) {
             return EmptyListViews(text: 'لا يوجد مستخدمون حاليًا');

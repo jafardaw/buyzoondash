@@ -18,15 +18,18 @@ class GovernoratesListCubit extends Cubit<GovernoratesListState> {
         page: _currentPage,
       );
       final hasNextPage = response.nextPageUrl != null;
-
-      emit(
-        GovernoratesListSuccess(
-          governorates: response.governorates,
-          hasNextPage: hasNextPage,
-        ),
-      );
+      if (!isClosed) {
+        emit(
+          GovernoratesListSuccess(
+            governorates: response.governorates,
+            hasNextPage: hasNextPage,
+          ),
+        );
+      }
     } catch (e) {
-      emit(GovernoratesListFailure(e.toString()));
+      if (!isClosed) {
+        emit(GovernoratesListFailure(e.toString()));
+      }
     }
   }
 
@@ -42,15 +45,18 @@ class GovernoratesListCubit extends Cubit<GovernoratesListState> {
           currentState.governorates,
         )..addAll(response.governorates);
         final hasNextPage = response.nextPageUrl != null;
-
-        emit(
-          GovernoratesListSuccess(
-            governorates: newGovernorates,
-            hasNextPage: hasNextPage,
-          ),
-        );
+        if (!isClosed) {
+          emit(
+            GovernoratesListSuccess(
+              governorates: newGovernorates,
+              hasNextPage: hasNextPage,
+            ),
+          );
+        }
       } catch (e) {
-        emit(GovernoratesListFailure('فشل تحميل المزيد: ${e.toString()}'));
+        if (!isClosed) {
+          emit(GovernoratesListFailure('فشل تحميل المزيد: ${e.toString()}'));
+        }
       }
     }
   }

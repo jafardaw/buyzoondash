@@ -2,13 +2,15 @@
 
 // ... (existing imports)
 import 'package:buyzoonapp/core/func/float_action_button.dart';
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/regions_page.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/add_city_dialog.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/location_card.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/update_city_dialog.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/city_repo.dart';
-import 'package:buyzoonapp/features/location/Governorates/repo/governorate_repo.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/city_model.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/governorate_model.dart';
@@ -48,16 +50,10 @@ class _CitiesPageState extends State<CitiesPage> {
     try {
       await CityRepo(ApiService()).deleteCity(cityId: city.id);
       _fetchGovernorate(); // تحديث القائمة بعد الحذف
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم الحذف بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
+
+      showCustomSnackBar(context, ' تم الحذف بنجاح', color: Palette.success);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('فشل الحذف: $e'), backgroundColor: Colors.red),
-      );
+      showCustomSnackBar(context, 'فشل الحذف: $e', color: Palette.error);
     }
   }
 
@@ -104,7 +100,12 @@ class _CitiesPageState extends State<CitiesPage> {
         future: _futureGovernorate,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return LoadingViewWidget(
+              type: LoadingType.imageShake,
+              imagePath:
+                  'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+              size: 200, // حجم الصورة
+            );
           } else if (snapshot.hasError) {
             return Center(child: Text('خطأ: ${snapshot.error}'));
           } else if (snapshot.hasData) {

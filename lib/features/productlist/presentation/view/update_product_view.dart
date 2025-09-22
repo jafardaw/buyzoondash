@@ -8,6 +8,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/productlist/data/product_list_model.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/updatecubit/update_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/updatecubit/update_product_state.dart';
@@ -86,11 +87,10 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
   _submitForm(BuildContext innerContext) {
     if (_formKey.currentState!.validate()) {
       if (_currentPhotos.length + _selectedImagesBytes.length < 2) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('يجب ان يتكون المنتج من صورتين حصرا'),
-            backgroundColor: Palette.error,
-          ),
+        showCustomSnackBar(
+          context,
+          'يجب ان يتكون المنتج من صورتين حصراً',
+          color: Palette.secandry,
         );
         return;
       }
@@ -120,7 +120,7 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
           );
           Navigator.pop(context, true);
         } else if (state is UpdateProductFailure) {
-          showCustomSnackBar(context, state.errorMessage, color: Palette.error);
+          showCustomSnackBar(context, ' فشل التعديل', color: Palette.error);
         }
       },
       builder: (context, state) {
@@ -289,11 +289,12 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
                   BlocBuilder<UpdateProductCubit, UpdateProductState>(
                     builder: (blocContext, state) {
                       bool isLoading = state is UpdateProductLoading;
+                      if (isLoading) {
+                        return Center(child: const LoadingViewWidget());
+                      }
                       return CustomButton(
-                        onTap: isLoading
-                            ? () {}
-                            : () => _submitForm(blocContext),
-                        text: isLoading ? 'جاري الحفظ...' : 'حفظ التعديلات',
+                        onTap: _submitForm(blocContext),
+                        text: 'حفظ التعديلات',
                       );
                     },
                   ),

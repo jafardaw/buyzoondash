@@ -1,5 +1,8 @@
 // lib/features/location/Governorates/presentation/view/widget/add_city_dialog.dart
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_city_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_city_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/city_repo.dart';
@@ -73,24 +76,23 @@ class _AddCityDialogState extends State<AddCityDialog> {
             listener: (context, state) {
               if (state is AddCitySuccess) {
                 Navigator.pop(context, true);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('تمت الإضافة بنجاح'),
-                    backgroundColor: Colors.green,
-                  ),
+
+                showCustomSnackBar(
+                  context,
+                  'تمت الإضافة بنجاح',
+                  color: Palette.success,
                 );
               } else if (state is AddCityFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('فشل الإضافة: ${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
+                showCustomSnackBar(
+                  context,
+                  'فشل الإضافة: ${state.error}',
+                  color: Palette.error,
                 );
               }
             },
             builder: (context, state) {
               if (state is AddCityLoading) {
-                return const CircularProgressIndicator();
+                return Center(child: const LoadingViewWidget());
               }
               return ElevatedButton(
                 onPressed: () {

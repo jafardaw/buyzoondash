@@ -17,7 +17,8 @@ class TopReportUsersModel {
     return TopReportUsersModel(
       user: UserModel.fromJson(json['user']),
       ordersCount: json['orders_count'] as int,
-      totalSpent: json['total_spent'] as double,
+      // *** تم تصحيح هذا السطر ***
+      totalSpent: double.parse(json['total_spent'].toString()),
     );
   }
 }

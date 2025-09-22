@@ -42,4 +42,14 @@ class BanCubit extends Cubit<BanState> {
       emit(BanFailure(e.toString()));
     }
   }
+
+  Future<void> unBan({required int userId}) async {
+    emit(BanLoading());
+    try {
+      final response = await _banRepo.unbanUser(userId: userId);
+      emit(BanSuccess(response));
+    } catch (e) {
+      emit(BanFailure(e.toString()));
+    }
+  }
 }

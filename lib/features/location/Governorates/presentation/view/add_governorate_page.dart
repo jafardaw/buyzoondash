@@ -5,6 +5,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_governorate_cubit.dart.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_governorate_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/governorate_repo.dart';
@@ -113,7 +114,7 @@ class _AddGovernorateFormState extends State<AddGovernorateForm> {
               },
               builder: (context, state) {
                 if (state is AddGovernorateLoading) {
-                  return const CircularProgressIndicator();
+                  return Center(child: const LoadingViewWidget());
                 }
                 return CustomButton(
                   onTap: () {

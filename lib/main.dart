@@ -22,10 +22,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await initializeLocalNotifications();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await initializeLocalNotifications();
 
-  // await setupNotifications();
+  await setupNotifications();
   runApp(const MyApp());
 }
 

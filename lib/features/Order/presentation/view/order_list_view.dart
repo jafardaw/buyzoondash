@@ -4,105 +4,15 @@ import 'package:buyzoonapp/core/func/dropdown_list.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_cubit.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_state.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/widget/order_item_card.dart';
+import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// lib/features/orders/presentation/view/orders_view.dart
-
-// class OrdersView extends StatefulWidget {
-//   const OrdersView({super.key});
-
-//   @override
-//   State<OrdersView> createState() => _OrdersViewState();
-// }
-
-// class _OrdersViewState extends State<OrdersView> {
-//   final _scrollController = ScrollController();
-
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   context.read<OrdersCubit>().getOrders();
-//   //   _scrollController.addListener(_onScroll);
-
-//   //   // Check the current state of the Cubit before fetching data
-//   //   // if (context.read<OrdersCubit>().state is OrdersInitial) {
-
-//   //   // }
-//   // }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _scrollController.addListener(_onScroll);
-
-//     // إعادة تحميل البيانات من جديد كل مرة تدخل الصفحة
-//     final cubit = context.read<OrdersCubit>();
-//     cubit.resetAndReload(); // دالة جديدة لمسح البيانات وإعادة الصفحة الأولى
-//     cubit.getOrders();
-//   }
-
-//   @override
-//   void dispose() {
-//     _scrollController.dispose();
-//     super.dispose();
-//   }
-
-//   void _onScroll() {
-//     if (_scrollController.position.pixels ==
-//         _scrollController.position.maxScrollExtent) {
-//       context.read<OrdersCubit>().getOrders();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppareWidget(
-//         title: 'قائمة الطلبات',
-//         automaticallyImplyLeading: true,
-//       ),
-//       body: BlocBuilder<OrdersCubit, OrdersState>(
-//         builder: (context, state) {
-//           if (state is OrdersLoading) {
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (state is OrdersSuccess) {
-//             return _buildOrdersList(
-//               state,
-//               showLoader: state is OrdersPaginationLoading,
-//             );
-//           } else if (state is OrdersFailure) {
-//             return Center(child: Text('حدث خطأ: ${state.errorMessage}'));
-//           }
-//           return const SizedBox.shrink();
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget _buildOrdersList(OrdersSuccess state, {bool showLoader = false}) {
-//     return ListView.builder(
-//       controller: _scrollController,
-//       itemCount: state.orders.length + (showLoader ? 1 : 0),
-//       itemBuilder: (context, index) {
-//         if (index >= state.orders.length) {
-//           return const Center(
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(vertical: 24.0),
-//               child: CircularProgressIndicator(),
-//             ),
-//           );
-//         }
-//         final order = state.orders[index];
-//         return OrderItemCard(order: order);
-//       },
-//     );
-//   }
-// }
-
-// lib/features/orders/presentation/view/orders_view.dart
 
 class OrdersView extends StatefulWidget {
   const OrdersView({super.key});
@@ -112,7 +22,6 @@ class OrdersView extends StatefulWidget {
 }
 
 class _OrdersViewState extends State<OrdersView> {
-  // 🛠️ إضافة متغيرات الفلتر
   final _formKey = GlobalKey<FormState>();
   String? _status;
   String? _paymentStatus;
@@ -136,7 +45,6 @@ class _OrdersViewState extends State<OrdersView> {
     super.dispose();
   }
 
-  // 🛠️ دالة لتطبيق الفلاتر والبدء من الصفحة الأولى
   void _applyFilters() {
     FocusScope.of(context).unfocus();
     final cubit = context.read<OrdersCubit>();
@@ -152,7 +60,6 @@ class _OrdersViewState extends State<OrdersView> {
     );
   }
 
-  // 🛠️ دالة لمسح الفلاتر
   void _clearFilters() {
     _formKey.currentState!.reset();
     setState(() {
@@ -168,13 +75,24 @@ class _OrdersViewState extends State<OrdersView> {
   }
 
   @override
-  // داخل دالة build في OrdersView
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppareWidget(
+      appBar: AppareWidget(
         title: 'قائمة الطلبات',
         automaticallyImplyLeading: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BroadcastNotificationScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.notifications),
+          ),
+        ],
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -186,14 +104,24 @@ class _OrdersViewState extends State<OrdersView> {
         body: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             if (state is OrdersLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const LoadingViewWidget(
+                type: LoadingType.imageShake,
+                imagePath:
+                    'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+                size: 200, // حجم الصورة
+              );
             } else if (state is OrdersSuccess) {
               return _buildOrdersList(
                 state,
                 showLoader: state is OrdersPaginationLoading,
               );
             } else if (state is OrdersFailure) {
-              return Center(child: Text('حدث خطأ: ${state.errorMessage}'));
+              return ShowErrorWidgetView.fullScreenError(
+                errorMessage: state.errorMessage,
+                onRetry: () {
+                  context.read<OrdersCubit>().getOrders();
+                },
+              );
             }
             return const SizedBox.shrink();
           },
@@ -204,19 +132,7 @@ class _OrdersViewState extends State<OrdersView> {
 
   Widget _buildOrdersList(OrdersSuccess state, {bool showLoader = false}) {
     if (state.orders.isEmpty) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.list_alt, size: 48, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'لا يوجد طلبات حالياً.',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-          ],
-        ),
-      );
+      return EmptyListViews(text: 'لا يوجد طلبات حالياً.');
     }
 
     return ListView.builder(
@@ -226,7 +142,7 @@ class _OrdersViewState extends State<OrdersView> {
           return const Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 24.0),
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Palette.primary),
             ),
           );
         }
@@ -236,7 +152,6 @@ class _OrdersViewState extends State<OrdersView> {
     );
   }
 
-  // 🛠️ دالة بناء قسم الفلاتر
   Widget _buildFilterSection() {
     return ExpansionTile(
       title: const Text(

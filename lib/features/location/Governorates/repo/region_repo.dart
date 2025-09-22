@@ -47,4 +47,45 @@ class RegionRepo {
       rethrow;
     }
   }
+
+  Future<String> updateRegion({
+    required int regionId,
+    required String name,
+    required int cityId,
+    required double price,
+  }) async {
+    try {
+      final response = await _apiService.update(
+        'api/regions/$regionId',
+        data: {"name": name, "city_id": cityId, "price": price},
+      );
+      final data = response.data;
+      if (data['status'] == true) {
+        return data['message'] ?? 'تم تعديل المنطقة بنجاح.';
+      } else {
+        throw Exception(data['message'] ?? 'فشل في تعديل المنطقة.');
+      }
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioError(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // دالة جديدة لحذف منطقة
+  Future<String> deleteRegion({required int regionId}) async {
+    try {
+      final response = await _apiService.delete('api/regions/$regionId');
+      final data = response.data;
+      if (data['status'] == true) {
+        return data['message'] ?? 'تم حذف المنطقة بنجاح.';
+      } else {
+        throw Exception(data['message'] ?? 'فشل في حذف المنطقة.');
+      }
+    } on DioException catch (e) {
+      throw ErrorHandler.handleDioError(e);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

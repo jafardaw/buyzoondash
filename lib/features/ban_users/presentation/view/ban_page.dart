@@ -1,5 +1,9 @@
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 
 import 'package:buyzoonapp/features/ban_users/presentation/manger/ban_cubit.dart';
 import 'package:buyzoonapp/features/ban_users/presentation/manger/ban_state.dart';
@@ -16,10 +20,11 @@ class BanPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => BanCubit(BanRepo(ApiService())),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('إدارة حظر المستخدم'),
-          centerTitle: true,
+        appBar: AppareWidget(
+          title: 'إدارة حظر المستخدم',
+          automaticallyImplyLeading: false,
         ),
+
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BanForm(userId: userId),
@@ -91,25 +96,23 @@ class _BanFormState extends State<BanForm> {
             BlocConsumer<BanCubit, BanState>(
               listener: (context, state) {
                 if (state is BanSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.response.message),
-                      backgroundColor: Colors.green,
-                    ),
+                  showCustomSnackBar(
+                    context,
+                    state.response.message,
+                    color: Palette.success,
                   );
                   Navigator.of(context).pop(true);
                 } else if (state is BanFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.error),
-                      backgroundColor: Colors.red,
-                    ),
+                  showCustomSnackBar(
+                    context,
+                    state.error,
+                    color: Palette.error,
                   );
                 }
               },
               builder: (context, state) {
                 if (state is BanLoading) {
-                  return const CircularProgressIndicator();
+                  return Center(child: const LoadingViewWidget());
                 }
                 return Column(
                   children: [
@@ -127,18 +130,14 @@ class _BanFormState extends State<BanForm> {
                     ),
 
                     const SizedBox(height: 10),
+
                     CustomButton(
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<BanCubit>().updateBan(
-                            userId: widget.userId,
-                            reason: _reasonController.text,
-                            days: int.parse(_daysController.text),
-                          );
+                          context.read<BanCubit>().unBan(userId: widget.userId);
                         }
                       },
-                      text: 'تعديل الحظر',
-                      // لون مختلف لزر التعديل
+                      text: 'فك حظر',
                     ),
                   ],
                 );

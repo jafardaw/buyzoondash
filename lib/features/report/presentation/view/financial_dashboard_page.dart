@@ -1,5 +1,8 @@
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/report/data/model/financial_report_report_model.dart';
 import 'package:buyzoonapp/features/report/data/model/top_report_products_model.dart';
 import 'package:buyzoonapp/features/report/data/model/top_report_users_model.dart';
@@ -32,20 +35,33 @@ class FinancialDashboardPage extends StatelessWidget {
           );
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'لوحة التحكم المالية',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          elevation: 0,
+        appBar: AppareWidget(
+          title: 'لوحة التحكم المالية',
+          automaticallyImplyLeading: false,
         ),
+
         body: BlocBuilder<FinancialReportCubit, FinancialReportState>(
           builder: (context, state) {
             if (state is FinancialReportLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const LoadingViewWidget(
+                type: LoadingType.imageShake,
+                imagePath:
+                    'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+                size: 200, // حجم الصورة
+              );
             } else if (state is FinancialReportFailure) {
-              return Center(child: Text('خطأ: ${state.error}'));
+              final now = DateTime.now();
+              final lastMonth = now.subtract(const Duration(days: 30));
+              return ShowErrorWidgetView.fullScreenError(
+                errorMessage: state.error,
+                onRetry: () {
+                  context.read<FinancialReportCubit>().getFinancialReport(
+                    timeline: 'monthly',
+                    from: DateFormat('yyyy-MM-dd').format(lastMonth),
+                    to: DateFormat('yyyy-MM-dd').format(now),
+                  );
+                },
+              );
             } else if (state is FinancialReportSuccess) {
               final report = state.report;
               return SingleChildScrollView(

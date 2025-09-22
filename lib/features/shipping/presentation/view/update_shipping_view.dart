@@ -4,6 +4,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/update_cubit/update_order_cubit.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/update_cubit/update_order_state.dart';
 import 'package:buyzoonapp/features/shipping/presentation/view/manager/update_cubit_shipp/update_shipping_cubit.dart';
@@ -108,9 +109,13 @@ class _UpdateShippningViewBodyState extends State<UpdateShippningViewBody> {
                 BlocBuilder<UpdateShippingCubit, UpdateShippingStatusState>(
                   builder: (context, state) {
                     final isLoading = state is UpdateShippingStatusLoading;
+
+                    if (isLoading) {
+                      return Center(child: const LoadingViewWidget());
+                    }
                     return CustomButton(
-                      onTap: isLoading ? () {} : _updateOrder,
-                      text: isLoading ? 'جاري التعديل...' : 'تعديل الطلب',
+                      onTap: _updateOrder,
+                      text: 'تعديل الطلب',
                     );
                   },
                 ),

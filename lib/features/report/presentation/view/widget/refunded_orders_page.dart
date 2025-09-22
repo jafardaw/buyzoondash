@@ -1,3 +1,4 @@
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/features/report/data/model/refunded_report_orders_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,13 +10,11 @@ class RefundedOrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'الطلبات المرتجعة',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: AppareWidget(
+        title: 'الطلبات المرتجعة',
+        automaticallyImplyLeading: false,
       ),
+
       body: orders.isEmpty
           ? const Center(child: Text('لا توجد طلبات مرتجعة في هذا التقرير.'))
           : ListView.builder(

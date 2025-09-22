@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/float_action_button.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/search_cubit/search_product_cubit.dart';
@@ -180,9 +181,11 @@ class ProductResultsSection extends StatelessWidget {
     return BlocBuilder<ProductSearchCubit, ProductSearchState>(
       builder: (context, state) {
         if (state is ProductSearchLoading) {
-          return SizedBox(
-            height: 200,
-            child: const Center(child: CircularProgressIndicator()),
+          return const LoadingViewWidget(
+            type: LoadingType.imageShake,
+            imagePath:
+                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+            size: 200, // حجم الصورة
           );
         } else if (state is RawMaterialSearchError) {
           return Center(

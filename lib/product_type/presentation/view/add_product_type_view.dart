@@ -4,6 +4,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
@@ -24,24 +25,29 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'إضافة منتج',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.deepPurple,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: AppareWidget(
+        title: 'إضافة منتج',
+        automaticallyImplyLeading: false,
       ),
+
+      // appBar: AppBar(
+      //   title: const Text(
+      //     'إضافة منتج',
+      //     style: TextStyle(
+      //       color: Colors.white,
+      //       fontWeight: FontWeight.bold,
+      //       fontSize: 22,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.deepPurple,
+      //   elevation: 0,
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back_ios_new_rounded),
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      // ),
       body: BlocListener<AddProductTypeCubit, AddProductTypeState>(
         listener: (context, state) {
           if (state is AddProductTypeLoading) {
@@ -141,12 +147,7 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
                     BlocBuilder<AddProductTypeCubit, AddProductTypeState>(
                       builder: (context, state) {
                         if (state is AddProductTypeLoading) {
-                          return const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                            strokeWidth: 3,
-                          );
+                          return Center(child: const LoadingViewWidget());
                         }
                         return CustomButton(
                           onTap: () {

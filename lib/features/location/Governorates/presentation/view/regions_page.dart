@@ -1,11 +1,21 @@
 import 'package:buyzoonapp/core/func/float_action_button.dart';
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/city_model.dart';
+import 'package:buyzoonapp/features/location/Governorates/data/model/region_model.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/delete_region_cubit.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/delete_region_state.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_region_cubit.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_region_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/add_region_dialog.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/location_card.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/update_region_dialog.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/region_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegionsPage extends StatefulWidget {
   final int cityId;
@@ -31,85 +41,147 @@ class _RegionsPageState extends State<RegionsPage> {
     });
   }
 
+  Future<void> _deleteRegion(int regionId) async {
+    try {
+      await RegionRepo(ApiService()).deleteRegion(regionId: regionId);
+      if (mounted) {
+        _fetchCity();
+        showCustomSnackBar(
+          context,
+          'تم حذف المنطقة بنجاح',
+          color: Palette.success,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        showCustomSnackBar(
+          context,
+          'فشل الحذف: ${e.toString()}',
+          color: Palette.error,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-      floatingActionButton: buildFloatactionBoutton(
-        context,
-        onPressed: () async {
-          final result = await showDialog(
-            context: context,
-            builder: (_) => AddRegionDialog(cityId: widget.cityId),
-          );
-          if (result == true) {
-            _fetchCity();
-          }
-        },
-      ),
-      appBar: AppareWidget(
-        automaticallyImplyLeading: true,
-        title: 'مناطق ${widget.cityName}',
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.add_circle_outline),
-        //     onPressed: () async {
-        //       final result = await showDialog(
-        //         context: context,
-        //         builder: (_) => AddRegionDialog(cityId: widget.cityId),
-        //       );
-        //       if (result == true) {
-        //         _fetchCity();
-        //       }
-        //     },
-        //   ),
-        // ],
-      ),
-
-      body: FutureBuilder<CityModel>(
-        future: _futureCity,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('خطأ: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final city = snapshot.data!;
-            if (city.regions.isEmpty) {
-              return const Center(child: Text('لا توجد مناطق في هذه المدينة.'));
-            }
-            return ListView.builder(
-              itemCount: city.regions.length,
-              itemBuilder: (context, index) {
-                final region = city.regions[index];
-                return LocationCard(
-                  title: region.name,
-                  subtitle: 'سعر التوصيل: ${region.price}',
-                  onEditPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('تعديل ${region.name}')),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UpdateRegionCubit(RegionRepo(ApiService())),
+        ),
+        BlocProvider(
+          create: (_) => DeleteRegionCubit(RegionRepo(ApiService())),
+        ),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<UpdateRegionCubit, UpdateRegionState>(
+            listener: (context, state) {
+              if (state is UpdateRegionSuccess) {
+                _fetchCity();
+              }
+            },
+          ),
+          BlocListener<DeleteRegionCubit, DeleteRegionState>(
+            listener: (context, state) {
+              if (state is DeleteRegionSuccess) {
+                _fetchCity();
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          floatingActionButton: buildFloatactionBoutton(
+            context,
+            onPressed: () async {
+              final result = await showDialog(
+                context: context,
+                builder: (_) => AddRegionDialog(cityId: widget.cityId),
+              );
+              if (result == true) {
+                _fetchCity();
+              }
+            },
+          ),
+          appBar: AppareWidget(
+            automaticallyImplyLeading: true,
+            title: 'مناطق ${widget.cityName}',
+          ),
+          body: FutureBuilder<CityModel>(
+            future: _futureCity,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LoadingViewWidget(
+                  type: LoadingType.imageShake,
+                  imagePath:
+                      'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
+                  size: 200,
+                );
+              } else if (snapshot.hasError) {
+                return Center(child: Text('خطأ: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                final city = snapshot.data!;
+                if (city.regions.isEmpty) {
+                  return const Center(
+                    child: Text('لا توجد مناطق في هذه المدينة.'),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: city.regions.length,
+                  itemBuilder: (context, index) {
+                    final region = city.regions[index];
+                    return LocationCard(
+                      title: region.name,
+                      subtitle: 'سعر التوصيل: ${region.price}',
+                      onEditPressed: () async {
+                        final result = await showDialog(
+                          context: context,
+                          builder: (_) => UpdateRegionDialog(
+                            region: region,
+                            cityId: widget.cityId,
+                          ),
+                        );
+                        if (result == true) {
+                          _fetchCity();
+                        }
+                      },
+                      onDeletePressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => AlertDialog(
+                            title: const Text('تأكيد الحذف'),
+                            content: Text(
+                              'هل أنت متأكد من حذف منطقة ${region.name}؟',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(dialogContext),
+                                child: const Text('إلغاء'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(dialogContext);
+                                  _deleteRegion(region.id);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                child: const Text('حذف'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     );
-                  },
-                  onDeletePressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('حذف ${region.name}')),
-                    );
-                  },
-                  onAddPressed: () async {
-                    final result = await showDialog(
-                      context: context,
-                      builder: (_) => AddRegionDialog(cityId: widget.cityId),
-                    );
-                    if (result == true) {
-                      _fetchCity();
-                    }
                   },
                 );
-              },
-            );
-          }
-          return const SizedBox.shrink();
-        },
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
       ),
     );
   }

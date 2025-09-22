@@ -1,6 +1,9 @@
 // lib/features/location/Governorates/presentation/view/widget/update_city_dialog.dart
 
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/city_model.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_city_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_city_state.dart';
@@ -82,24 +85,28 @@ class _UpdateCityDialogState extends State<UpdateCityDialog> {
             listener: (context, state) {
               if (state is UpdateCitySuccess) {
                 Navigator.pop(context, true);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('تم التعديل بنجاح'),
-                    backgroundColor: Colors.green,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(
+                //     content: Text('تم التعديل بنجاح'),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+                showCustomSnackBar(
+                  context,
+                  'تم التعديل بنجاح',
+                  color: Palette.success,
                 );
               } else if (state is UpdateCityFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('فشل التعديل: ${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
+                showCustomSnackBar(
+                  context,
+                  'فشل التعديل: ${state.error}',
+                  color: Palette.error,
                 );
               }
             },
             builder: (context, state) {
               if (state is UpdateCityLoading) {
-                return const CircularProgressIndicator();
+                return Center(child: const LoadingViewWidget());
               }
               return ElevatedButton(
                 onPressed: () {

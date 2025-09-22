@@ -13,7 +13,7 @@ class TopProductsPage extends StatefulWidget {
 }
 
 class _TopProductsPageState extends State<TopProductsPage> {
-  int _touchedIndex = -1; // -1 يعني لا يوجد أي شريحة محددة
+  int _touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {

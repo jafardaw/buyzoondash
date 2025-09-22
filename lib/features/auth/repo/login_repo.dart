@@ -25,8 +25,7 @@ class LoginRepo {
       final response = await _apiService.post('api/admin/login', {
         "username_or_phone": usernameOrPhone,
         "password": password,
-        "fcm_token":
-            "fEVTDUCqSbuLPIBJ4sdLtX:APA91bGr8w3VewBL_J1aX0RTXPwQ2vmXfItXlAYfpTU4g475IprYkZEAgu62enTA_buW23fozh2dnuyzP8lmUWkZTMRWVrNfIGt3POw8Ly1gU_rrYoDGRVY",
+        "fcm_token": fcmToken,
       });
 
       final data = response.data;

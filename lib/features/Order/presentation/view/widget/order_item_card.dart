@@ -1,7 +1,11 @@
+import 'package:buyzoonapp/core/func/show_menu.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
 import 'package:buyzoonapp/features/Order/data/order_model.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_cubit.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/update_order_view.dart';
+import 'package:buyzoonapp/features/invoice/presentation/view/invoice_view.dart';
 import 'package:buyzoonapp/features/shipping/presentation/view/manager/getCubit/get_shipping_cubit.dart';
 import 'package:buyzoonapp/features/shipping/presentation/view/shipping_view.dart';
 import 'package:buyzoonapp/features/shipping/repo/shipping_repo.dart';
@@ -14,7 +18,37 @@ class OrderItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // استخدم Card مع Elevation لإضافة ظل جذاب
+    List<Map<String, dynamic>> myMenuItems = [
+      {
+        'value': 'shipping',
+        'icon': const Icon(Icons.view_list, color: Palette.secandry),
+        'title': 'حالة الشحنة ',
+        'onTap': () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) =>
+                    ShippingCubit(ShippingRepository(ApiService())),
+                child: ShippingView(orderid: order.id),
+              ),
+            ),
+          );
+        },
+      },
+      {
+        'value': 'bill',
+        'icon': const Icon(Icons.edit, color: Palette.primary),
+        'title': 'الفاتورة لهذا الطلب',
+        'onTap': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InvoiceView(orderId: order.id),
+            ),
+          );
+        },
+      },
+    ];
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
@@ -24,10 +58,20 @@ class OrderItemCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // رأس البطاقة: رقم الطلب والحالة
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                InkWell(
+                  onTapDown: (details) {
+                    showProductMenu(
+                      context: context,
+                      position: details.globalPosition,
+                      menuItems: myMenuItems,
+                    );
+                  },
+                  child: Icon(Icons.menu),
+                ),
+
                 IconButton(
                   onPressed: () {
                     // Example of how to navigate to the ShippingView
@@ -50,21 +94,6 @@ class OrderItemCard extends StatelessWidget {
                   icon: Icon(Icons.edit, color: Colors.green),
                 ),
 
-                IconButton(
-                  onPressed: () {
-                    // Example of how to navigate to the ShippingView
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                          create: (context) =>
-                              ShippingCubit(ShippingRepository(ApiService())),
-                          child: ShippingView(orderid: order.id),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.abc),
-                ),
                 Text(
                   'رقم الطلب: #${order.id}',
                   style: const TextStyle(
@@ -110,7 +139,7 @@ class OrderItemCard extends StatelessWidget {
                 return _buildOrderItem(item);
               })
             else
-              const Text('لا يوجد عناصر في هذا الطلب.'),
+              const EmptyListViews(text: 'لا يوجد عناصر في هذا الطلب.'),
           ],
         ),
       ),

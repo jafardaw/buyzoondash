@@ -1,4 +1,7 @@
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
+import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_region_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_region_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/region_repo.dart';
@@ -71,24 +74,29 @@ class _AddRegionDialogState extends State<AddRegionDialog> {
             listener: (context, state) {
               if (state is AddRegionSuccess) {
                 Navigator.pop(context, true);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('تمت الإضافة بنجاح'),
-                    backgroundColor: Colors.green,
-                  ),
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   const SnackBar(
+                //     content: Text('تمت الإضافة بنجاح'),
+                //     backgroundColor: Colors.green,
+                //   ),
+                // );
+
+                showCustomSnackBar(
+                  context,
+                  'تمت الإضافة بنجاح',
+                  color: Palette.success,
                 );
               } else if (state is AddRegionFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('فشل الإضافة: ${state.error}'),
-                    backgroundColor: Colors.red,
-                  ),
+                showCustomSnackBar(
+                  context,
+                  'فشل الإضافة: ${state.error}',
+                  color: Palette.error,
                 );
               }
             },
             builder: (context, state) {
               if (state is AddRegionLoading) {
-                return const CircularProgressIndicator();
+                return Center(child: const LoadingViewWidget());
               }
               return ElevatedButton(
                 onPressed: () {

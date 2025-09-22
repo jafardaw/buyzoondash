@@ -124,8 +124,7 @@ class __ImageShakeLoadingState extends State<_ImageShakeLoading>
             },
           ),
 
-          // نقاط التحميل التقليدية كخلفية
-          _PulseDotsLoading(color: widget.color.withOpacity(0.5), size: 30),
+          // _PulseDotsLoading(color: widget.color.withOpacity(0.5), size: 30),
         ],
       ),
     );

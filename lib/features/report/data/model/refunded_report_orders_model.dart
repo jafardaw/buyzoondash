@@ -29,8 +29,10 @@ class RefundedOrdersModel {
     return RefundedOrdersModel(
       id: json['id'] as int,
       invoiceNumber: json['invoice_number'] as String?,
-      totalPrice: json['total_price'] as double,
-      totalProfit: json['total_profit'] as double,
+      // *** هذا هو السطر الذي تم تصحيحه ***
+      totalPrice: double.parse(json['total_price'].toString()),
+      // *** تم تصحيح هذا أيضاً ***
+      totalProfit: double.parse(json['total_profit'].toString()),
       user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
       status: json['status'] as String,
       paymentStatus: json['payment_status'] as String,

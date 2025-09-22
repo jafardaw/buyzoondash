@@ -1,7 +1,9 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/update_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:flutter/material.dart';
@@ -33,16 +35,11 @@ class _UpdateProductTypeScreenState extends State<UpdateProductTypView> {
       create: (context) =>
           UpdateProductTypeCubit(ProductTypeRepo(ApiService())),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'تعديل نوع منتج',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.deepPurple,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white),
+        appBar: AppareWidget(
+          title: 'تعديل نوع منتج',
+          automaticallyImplyLeading: false,
         ),
+
         body: BlocListener<UpdateProductTypeCubit, UpdateProductTypeState>(
           listener: (context, state) {
             if (state is UpdateProductTypeLoading) {
@@ -126,9 +123,7 @@ class _UpdateProductTypeScreenState extends State<UpdateProductTypView> {
                     BlocBuilder<UpdateProductTypeCubit, UpdateProductTypeState>(
                       builder: (context, state) {
                         if (state is UpdateProductTypeLoading) {
-                          return const CircularProgressIndicator(
-                            color: Colors.white,
-                          );
+                          return Center(child: const LoadingViewWidget());
                         }
                         return CustomButton(
                           onTap: () {

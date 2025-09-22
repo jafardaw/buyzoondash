@@ -17,12 +17,9 @@ class UsersCubit extends Cubit<UsersState> {
 
     _isLoading = true;
 
-    // إذا كانت الصفحة الأولى، اعرض حالة التحميل الكاملة
     if (_currentPage == 1) {
       emit(UsersLoading());
-    } else {
-      // إذا لم تكن الصفحة الأولى، لا تغير الحالة إلى loading
-    }
+    } else {}
 
     try {
       final usersResponse = await _usersRepo.getUsers(page: _currentPage);
@@ -33,10 +30,13 @@ class UsersCubit extends Cubit<UsersState> {
 
       _canLoadMore = usersResponse.hasMore;
       _currentPage++;
-
-      emit(UsersSuccess([...currentUsers, ...usersResponse.users]));
+      if (!isClosed) {
+        emit(UsersSuccess([...currentUsers, ...usersResponse.users]));
+      }
     } catch (e) {
-      emit(UsersFailure(e.toString()));
+      if (!isClosed) {
+        emit(UsersFailure(e.toString()));
+      }
     } finally {
       _isLoading = false;
     }

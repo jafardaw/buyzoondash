@@ -1,3 +1,5 @@
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
 import 'package:buyzoonapp/features/report/data/model/top_report_users_model.dart';
 import 'package:flutter/material.dart';
 
@@ -8,15 +10,13 @@ class TopUsersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'أفضل المستخدمين',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+      appBar: AppareWidget(
+        title: 'أفضل المستخدمين',
+        automaticallyImplyLeading: false,
       ),
+
       body: users.isEmpty
-          ? const Center(child: Text('لا يوجد مستخدمون في هذا التقرير.'))
+          ? const EmptyListViews(text: 'لا يوجد مستخدمون في هذا التقرير.')
           : ListView.builder(
               padding: const EdgeInsets.all(16.0),
               itemCount: users.length,

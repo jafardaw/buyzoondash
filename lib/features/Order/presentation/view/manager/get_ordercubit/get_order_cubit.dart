@@ -78,7 +78,6 @@ class OrdersCubit extends Cubit<OrdersState> {
 
   OrdersCubit(this._ordersRepository) : super(OrdersInitial());
 
-  // 🛠️ تعديل الدالة لقبول الفلاتر
   void resetAndReload({
     String? status,
     String? paymentStatus,
@@ -91,7 +90,6 @@ class OrdersCubit extends Cubit<OrdersState> {
     _allOrders.clear();
     _lastPage = 1;
 
-    // 🛠️ حفظ الفلاتر الجديدة
     _status = status;
     _paymentStatus = paymentStatus;
     _shippingStatus = shippingStatus;
@@ -103,7 +101,6 @@ class OrdersCubit extends Cubit<OrdersState> {
     getOrders();
   }
 
-  // 🛠️ دالة لإعادة تحميل الطلبات بدون مسح الفلاتر
   void refreshOrders() {
     _currentPage = 1;
     _allOrders.clear();
@@ -142,17 +139,23 @@ class OrdersCubit extends Cubit<OrdersState> {
       if (newOrders.isNotEmpty) {
         _allOrders.addAll(newOrders);
         _currentPage++;
-        emit(
-          OrdersSuccess(
-            orders: _allOrders,
-            hasMoreData: _currentPage <= _lastPage,
-          ),
-        );
+        if (!isClosed) {
+          emit(
+            OrdersSuccess(
+              orders: _allOrders,
+              hasMoreData: _currentPage <= _lastPage,
+            ),
+          );
+        }
       } else {
-        emit(OrdersSuccess(orders: _allOrders, hasMoreData: false));
+        if (!isClosed) {
+          emit(OrdersSuccess(orders: _allOrders, hasMoreData: false));
+        }
       }
     } catch (e) {
-      emit(OrdersFailure(errorMessage: e.toString()));
+      if (!isClosed) {
+        emit(OrdersFailure(errorMessage: e.toString()));
+      }
     } finally {
       _isLoading = false;
     }

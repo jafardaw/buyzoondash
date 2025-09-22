@@ -32,22 +32,29 @@ class GetProductTypeCubit extends Cubit<GetProductTypeState> {
     emit(GetProductTypeLoading());
     try {
       _allProductTypes = await _productTypeRepo.getProductTypes();
-      emit(GetProductTypeSuccess(_allProductTypes));
+      if (!isClosed) {
+        emit(GetProductTypeSuccess(_allProductTypes));
+      }
     } catch (e) {
-      emit(GetProductTypeFailure(e.toString()));
+      if (!isClosed) {
+        emit(GetProductTypeFailure(e.toString()));
+      }
     }
   }
 
-  // دالة البحث الجديدة
   void searchProductTypes(String query) {
     if (state is GetProductTypeSuccess) {
       if (query.isEmpty) {
-        emit(GetProductTypeSuccess(_allProductTypes));
+        if (!isClosed) {
+          emit(GetProductTypeSuccess(_allProductTypes));
+        }
       } else {
         final filteredList = _allProductTypes.where((productType) {
           return productType.name.toLowerCase().contains(query.toLowerCase());
         }).toList();
-        emit(GetProductTypeSuccess(filteredList));
+        if (!isClosed) {
+          emit(GetProductTypeSuccess(filteredList));
+        }
       }
     }
   }

@@ -4,6 +4,7 @@ import 'package:buyzoonapp/core/func/float_action_button.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/governorates_list_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/governorates_list_state.dart';
@@ -12,6 +13,7 @@ import 'package:buyzoonapp/features/location/Governorates/presentation/view/city
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/location_card.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/widget/update_governorate_dialog.dart';
 import 'package:buyzoonapp/features/location/Governorates/repo/governorate_repo.dart';
+import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,27 +56,58 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
       child: Builder(
         builder: (providerContext) {
           return Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.startFloat,
+            floatingActionButton: buildFloatactionBoutton(
+              context,
+              onPressed: () async {
+                final result = await Navigator.push(
+                  providerContext,
+                  MaterialPageRoute(
+                    builder: (ctx) => const AddGovernoratePage(),
+                  ),
+                );
+                if (result == true) {
+                  if (mounted) {
+                    providerContext
+                        .read<GovernoratesListCubit>()
+                        .fetchGovernorates();
+                  }
+                }
+              },
+            ),
             appBar: AppareWidget(
               automaticallyImplyLeading: true,
               title: 'المحافظات',
               actions: [
+                // IconButton(
+                //   icon: Icon(Icons.add_circle_outline),
+                //   onPressed: () async {
+                //     final result = await Navigator.push(
+                //       providerContext,
+                //       MaterialPageRoute(
+                //         builder: (ctx) => const AddGovernoratePage(),
+                //       ),
+                //     );
+                //     if (result == true) {
+                //       if (mounted) {
+                //         providerContext
+                //             .read<GovernoratesListCubit>()
+                //             .fetchGovernorates();
+                //       }
+                //     }
+                //   },
+                // ),
                 IconButton(
-                  icon: Icon(Icons.add_circle_outline),
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      providerContext,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
-                        builder: (ctx) => const AddGovernoratePage(),
+                        builder: (context) => BroadcastNotificationScreen(),
                       ),
                     );
-                    if (result == true) {
-                      if (mounted) {
-                        providerContext
-                            .read<GovernoratesListCubit>()
-                            .fetchGovernorates();
-                      }
-                    }
                   },
+                  icon: Icon(Icons.notifications),
                 ),
               ],
             ),
@@ -93,7 +126,14 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                     color: Palette.primary, // اللون
                   );
                 } else if (state is GovernoratesListFailure) {
-                  return Center(child: Text('خطأ: ${state.error}'));
+                  return ShowErrorWidgetView.fullScreenError(
+                    errorMessage: state.error,
+                    onRetry: () {
+                      GovernoratesListCubit(
+                        GovernorateRepo(ApiService()),
+                      ).fetchGovernorates();
+                    },
+                  );
                 } else if (state is GovernoratesListSuccess) {
                   return ListView.builder(
                     controller: _scrollController,
@@ -103,7 +143,12 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                       if (index >= state.governorates.length) {
                         return const Padding(
                           padding: EdgeInsets.symmetric(vertical: 20.0),
-                          child: Center(child: CircularProgressIndicator()),
+                          child: LoadingViewWidget(
+                            type: LoadingType.imageShake,
+                            imagePath:
+                                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+                            size: 200, // حجم الصورة
+                          ),
                         );
                       }
                       final governorate = state.governorates[index];

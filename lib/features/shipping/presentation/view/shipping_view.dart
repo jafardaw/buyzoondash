@@ -2,6 +2,8 @@
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/shipping/data/shipping_model.dart';
 import 'package:buyzoonapp/features/shipping/presentation/view/manager/getCubit/get_shipping_cubit.dart';
 import 'package:buyzoonapp/features/shipping/presentation/view/manager/getCubit/get_shipping_state.dart';
@@ -37,11 +39,23 @@ class _ShippingViewState extends State<ShippingView> {
       body: BlocBuilder<ShippingCubit, ShippingState>(
         builder: (context, state) {
           if (state is ShippingLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingViewWidget(
+              type: LoadingType.imageShake,
+              imagePath:
+                  'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+              size: 200, // حجم الصورة
+            );
           } else if (state is ShippingSuccess) {
             return _buildShippingDetails(state.shipping);
           } else if (state is ShippingFailure) {
-            return Center(child: Text('حدث خطأ: ${state.errorMessage}'));
+            return ShowErrorWidgetView.fullScreenError(
+              errorMessage: state.errorMessage,
+              onRetry: () {
+                context.read<ShippingCubit>().getShippingDetails(
+                  widget.orderid,
+                );
+              },
+            );
           }
           return const SizedBox.shrink();
         },

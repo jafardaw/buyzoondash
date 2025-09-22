@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,8 +24,15 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     });
 
-    Timer(const Duration(seconds: 4), () {
-      AppRoutes.pushNamed(context, AppRoutes.login);
+    Timer(const Duration(seconds: 4), () async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token == null || token.isEmpty) {
+        AppRoutes.goNamed(context, AppRoutes.login);
+      } else {
+        AppRoutes.goNamed(context, AppRoutes.rootView);
+      }
       // Navigator.of(context).push(
       //   MaterialPageRoute(
       //     builder: (context) =>

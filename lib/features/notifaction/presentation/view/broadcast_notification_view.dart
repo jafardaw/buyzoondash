@@ -4,6 +4,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/notifaction/presentation/manger/broadcast_cubit.dart';
 import 'package:buyzoonapp/features/notifaction/repo/broadcast_repo.dart';
 import 'package:flutter/material.dart';
@@ -123,9 +124,7 @@ class _BroadcastNotificationScreenState
                     BlocBuilder<BroadcastCubit, BroadcastState>(
                       builder: (context, state) {
                         if (state is BroadcastLoading) {
-                          return const CircularProgressIndicator(
-                            color: Colors.white,
-                          );
+                          return Center(child: const LoadingViewWidget());
                         }
                         return CustomButton(
                           onTap: () {

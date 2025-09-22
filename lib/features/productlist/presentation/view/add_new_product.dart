@@ -1,10 +1,12 @@
 // lib/features/add_product/add_new_product.dart
 
 import 'dart:typed_data';
+import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_state.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:flutter/material.dart';
@@ -52,18 +54,16 @@ class _AddNewProductState extends State<AddNewProduct> {
   _submitForm(BuildContext innerContext) {
     if (_formKey.currentState!.validate()) {
       if (_selectedImagesBytes.length < 2) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('الرجاء اختيار صورتين على الأقل.'),
-            backgroundColor: Palette.error,
-          ),
+        showCustomSnackBar(
+          context,
+          'الرجاء اختيار صورتين على الأقل.',
+          color: Palette.secandry,
         );
       } else if (_rating == 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('الرجاء تحديد تقييم للمنتج.'),
-            backgroundColor: Palette.error,
-          ),
+        showCustomSnackBar(
+          context,
+          'الرجاء تحديد تقييم للمنتج',
+          color: Palette.secandry,
         );
       } else {
         innerContext.read<AddProductCubit>().addNewProduct(
@@ -89,20 +89,18 @@ class _AddNewProductState extends State<AddNewProduct> {
       body: BlocListener<AddProductCubit, AddProductState>(
         listener: (context, state) {
           if (state is AddProductSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('تم إضافة المنتج بنجاح!'),
-                backgroundColor: Palette.primary,
-              ),
+            showCustomSnackBar(
+              context,
+              'تم إضافة المنتج بنجاح',
+              color: Palette.success,
             );
 
             Navigator.pop(context, true);
           } else if (state is AddProductFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: Palette.error,
-              ),
+            showCustomSnackBar(
+              context,
+              state.errorMessage,
+              color: Palette.error,
             );
           }
         },
@@ -214,9 +212,13 @@ class _AddNewProductState extends State<AddNewProduct> {
                 BlocBuilder<AddProductCubit, AddProductState>(
                   builder: (blocContext, state) {
                     bool isLoading = state is AddProductLoading;
+
+                    if (isLoading) {
+                      return Center(child: const LoadingViewWidget());
+                    }
                     return CustomButton(
-                      onTap: isLoading ? () {} : () => _submitForm(blocContext),
-                      text: isLoading ? 'جاري الحفظ...' : 'حفظ المنتج',
+                      onTap: _submitForm(blocContext),
+                      text: 'حفظ المنتج',
                     );
                   },
                 ),

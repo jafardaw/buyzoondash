@@ -73,7 +73,7 @@ class BanRepo {
   }) async {
     try {
       final response = await _apiService.update(
-        'api/users/$userId/unban',
+        'api/update/bans/$userId',
         data: {"user_id": userId, "reason": reason, "days": days},
       );
 

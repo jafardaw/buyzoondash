@@ -1,24 +1,27 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
-import 'package:buyzoonapp/core/widget/loading_view.dart';
-import 'package:buyzoonapp/features/location/Governorates/data/model/governorate_model.dart';
-import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_governorate_cubit.dart';
-import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_governorate_state.dart';
-import 'package:buyzoonapp/features/location/Governorates/repo/governorate_repo.dart';
+import 'package:buyzoonapp/features/location/Governorates/data/model/region_model.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_region_cubit.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_region_state.dart';
+import 'package:buyzoonapp/features/location/Governorates/repo/region_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UpdateGovernorateDialog extends StatefulWidget {
-  final GovernorateModel governorate;
-  const UpdateGovernorateDialog({super.key, required this.governorate});
+class UpdateRegionDialog extends StatefulWidget {
+  final RegionModel region;
+  final int cityId;
+  const UpdateRegionDialog({
+    super.key,
+    required this.region,
+    required this.cityId,
+  });
 
   @override
-  State<UpdateGovernorateDialog> createState() =>
-      _UpdateGovernorateDialogState();
+  State<UpdateRegionDialog> createState() => _UpdateRegionDialogState();
 }
 
-class _UpdateGovernorateDialogState extends State<UpdateGovernorateDialog> {
+class _UpdateRegionDialogState extends State<UpdateRegionDialog> {
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
   final _formKey = GlobalKey<FormState>();
@@ -26,8 +29,8 @@ class _UpdateGovernorateDialogState extends State<UpdateGovernorateDialog> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.governorate.name);
-    _priceController = TextEditingController(text: widget.governorate.price);
+    _nameController = TextEditingController(text: widget.region.name);
+    _priceController = TextEditingController(text: widget.region.price);
   }
 
   @override
@@ -40,10 +43,9 @@ class _UpdateGovernorateDialogState extends State<UpdateGovernorateDialog> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          UpdateGovernorateCubit(GovernorateRepo(ApiService())),
+      create: (context) => UpdateRegionCubit(RegionRepo(ApiService())),
       child: AlertDialog(
-        title: const Text('تعديل المحافظة'),
+        title: const Text('تعديل المنطقة'),
         content: Form(
           key: _formKey,
           child: Column(
@@ -51,7 +53,7 @@ class _UpdateGovernorateDialogState extends State<UpdateGovernorateDialog> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'اسم المحافظة'),
+                decoration: const InputDecoration(labelText: 'اسم المنطقة'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'الرجاء إدخال اسم';
@@ -80,34 +82,30 @@ class _UpdateGovernorateDialogState extends State<UpdateGovernorateDialog> {
             onPressed: () => Navigator.pop(context),
             child: const Text('إلغاء'),
           ),
-          BlocConsumer<UpdateGovernorateCubit, UpdateGovernorateState>(
+          BlocConsumer<UpdateRegionCubit, UpdateRegionState>(
             listener: (context, state) {
-              if (state is UpdateGovernorateSuccess) {
-                // إغلاق الـ Dialog
-                Navigator.pop(context, true); // إرسال true كإشارة للنجاح
+              if (state is UpdateRegionSuccess) {
                 showCustomSnackBar(
                   context,
-                  'تم التعديل بنجاح',
+                  state.message,
                   color: Palette.success,
                 );
-              } else if (state is UpdateGovernorateFailure) {
-                showCustomSnackBar(
-                  context,
-                  'فشل التعديل: ${state.error}',
-                  color: Palette.error,
-                );
+                Navigator.pop(context, true);
+              } else if (state is UpdateRegionFailure) {
+                showCustomSnackBar(context, state.error, color: Palette.error);
               }
             },
             builder: (context, state) {
-              if (state is UpdateGovernorateLoading) {
-                return Center(child: const LoadingViewWidget());
+              if (state is UpdateRegionLoading) {
+                return const CircularProgressIndicator();
               }
               return ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context.read<UpdateGovernorateCubit>().updateGovernorate(
-                      id: widget.governorate.id,
+                    context.read<UpdateRegionCubit>().updateRegion(
+                      regionId: widget.region.id,
                       name: _nameController.text,
+                      cityId: widget.cityId,
                       price: double.parse(_priceController.text),
                     );
                   }

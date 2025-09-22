@@ -2,6 +2,9 @@
 
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/invoice/data/model/invoice_model.dart';
 import 'package:buyzoonapp/features/invoice/presentation/manger/invoice_cubit.dart';
 import 'package:buyzoonapp/features/invoice/presentation/manger/invoice_model.dart';
@@ -21,22 +24,32 @@ class InvoiceView extends StatelessWidget {
           InvoiceCubit(InvoiceRepo(ApiService()))
             ..fetchInvoice(orderId: orderId),
       child: Scaffold(
-        backgroundColor: Palette.backgroundColor, // استخدام لون الخلفية الجديد
-        appBar: AppBar(
-          backgroundColor: Palette.backgroundColor, // لون الـ AppBar
-          title: const Text(
-            'الفاتورة',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          elevation: 0,
+        backgroundColor: Palette.backgroundColor,
+        appBar: AppareWidget(
+          title: 'الفاتورة',
+          automaticallyImplyLeading: false,
         ),
+
         body: BlocBuilder<InvoiceCubit, InvoiceState>(
           builder: (context, state) {
             if (state is InvoiceLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: LoadingViewWidget(
+                  type: LoadingType.imageShake,
+                  imagePath:
+                      'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+                  size: 200, // حجم الصورة
+                ),
+              );
             } else if (state is InvoiceFailure) {
-              return Center(child: Text('خطأ: ${state.error}'));
+              return ShowErrorWidgetView.fullScreenError(
+                errorMessage: state.error,
+                onRetry: () {
+                  InvoiceCubit(
+                    InvoiceRepo(ApiService()),
+                  ).fetchInvoice(orderId: orderId);
+                },
+              );
             } else if (state is InvoiceSuccess) {
               final invoice = state.invoice;
               return SingleChildScrollView(

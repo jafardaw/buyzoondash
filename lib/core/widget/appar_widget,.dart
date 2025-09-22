@@ -37,7 +37,10 @@ class AppareWidget extends StatelessWidget implements PreferredSizeWidget {
       title: Center(
         child: Text(
           title,
-          style: Styles.textStyle18.copyWith(color: Colors.white),
+          style: Styles.textStyle18.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

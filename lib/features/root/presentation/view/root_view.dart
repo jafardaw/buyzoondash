@@ -1,6 +1,6 @@
 import 'package:buyzoonapp/core/style/color.dart';
-import 'package:buyzoonapp/features/ban_users/presentation/view/banned_users_screen.dart';
-import 'package:buyzoonapp/features/invoice/presentation/view/invoice_view.dart';
+import 'package:buyzoonapp/features/Order/presentation/view/order_list_view.dart';
+import 'package:buyzoonapp/features/admin_setting_mang/view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/governorates_page.dart';
 import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
 import 'package:buyzoonapp/features/report/presentation/view/financial_dashboard_page.dart';
@@ -17,14 +17,14 @@ class RootView extends StatefulWidget {
 }
 
 class RootViewState extends State<RootView> {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
   final List<Widget> _pages = [
-    GovernoratesPage(),
-    BannedUsersScreen(),
+    OrdersView(),
     UsersScreen(),
     ProductTypesScreen(),
-    InvoiceView(orderId: 2),
+    GovernoratesPage(),
+    AdminDashboardScreen(),
   ];
 
   @override
@@ -33,11 +33,11 @@ class RootViewState extends State<RootView> {
       body: _pages[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex,
-        height: 60.0,
+        height: 53.5,
         items: <Widget>[
           Icon(Icons.home, size: 30, color: Colors.white),
           Icon(Icons.lock, size: 30, color: Colors.white),
-          Icon(Icons.person_2, size: 30, color: Colors.white),
+          Icon(Icons.category, size: 30, color: Colors.white),
           Icon(Icons.notifications, size: 30, color: Colors.white),
           Icon(Icons.more_horiz, size: 30, color: Colors.white),
         ],

@@ -1,6 +1,10 @@
 // lib/features/ban_users/presentation/view/banned_users_screen.dart
 
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/ban_users/data/model/ban_user_model.dart';
 import 'package:buyzoonapp/features/ban_users/presentation/manger/banned_users_cubit.dart';
 import 'package:buyzoonapp/features/ban_users/presentation/manger/banned_users_state.dart';
@@ -19,10 +23,11 @@ class BannedUsersScreen extends StatelessWidget {
       create: (context) =>
           BannedUsersCubit(BannedUsersRepo(ApiService()))..getBannedUsers(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('المستخدمون المحظورون'),
-          centerTitle: true,
+        appBar: AppareWidget(
+          title: 'المستخدمون المحظورون',
+          automaticallyImplyLeading: false,
         ),
+
         body: const BannedUsersBodyView(),
       ),
     );
@@ -37,14 +42,24 @@ class BannedUsersBodyView extends StatelessWidget {
     return BlocBuilder<BannedUsersCubit, BannedUsersState>(
       builder: (context, state) {
         if (state is BannedUsersLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: LoadingViewWidget(
+              type: LoadingType.imageShake,
+              imagePath:
+                  'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+              size: 200, // حجم الصورة
+            ),
+          );
         } else if (state is BannedUsersFailure) {
-          return Center(child: Text('خطأ: ${state.error}'));
+          return ShowErrorWidgetView.fullScreenError(
+            errorMessage: state.error,
+            onRetry: () {
+              BannedUsersCubit(BannedUsersRepo(ApiService())).getBannedUsers();
+            },
+          );
         } else if (state is BannedUsersSuccess) {
           if (state.users.isEmpty) {
-            return const Center(
-              child: Text('لا يوجد مستخدمون محظورون حاليًا.'),
-            );
+            return EmptyListViews(text: 'لا يوجد مستخدمون محظورون حاليًا.');
           }
           return ListView.builder(
             itemCount: state.users.length,
