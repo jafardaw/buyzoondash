@@ -15,6 +15,42 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/product_type/data/model/product_type_model.dart';
 
+// class ProductTypesScreen extends StatefulWidget {
+//   const ProductTypesScreen({super.key});
+
+//   @override
+//   State<ProductTypesScreen> createState() => _ProductTypesScreenState();
+// }
+
+// class _ProductTypesScreenState extends State<ProductTypesScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text(
+//           'أنواع المنتجات',
+//           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+//         ),
+//         centerTitle: true,
+//         backgroundColor: Colors.green,
+//         elevation: 0,
+//         leading: const BackButton(color: Colors.white),
+//       ),
+//       body: const ProductTypeBodyView(),
+//       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+//       floatingActionButton: buildFloatactionBoutton(
+//         context,
+//         onPressed: () {
+//           AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
+//         },
+//       ),
+//     );
+//   }
+// }
+
+import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
+import 'package:buyzoonapp/core/util/api_service.dart';
+
 class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});
 
@@ -23,25 +59,86 @@ class ProductTypesScreen extends StatefulWidget {
 }
 
 class _ProductTypesScreenState extends State<ProductTypesScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'أنواع المنتجات',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<GetProductTypeCubit>(
+          create: (context) =>
+              GetProductTypeCubit(ProductTypeRepo(ApiService()))
+                ..getProductTypes(),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.green,
-        elevation: 0,
-        leading: const BackButton(color: Colors.white),
-      ),
-      body: const ProductTypeBodyView(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: buildFloatactionBoutton(
-        context,
-        onPressed: () {
-          AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
+        BlocProvider<DeleteProductTypeCubit>(
+          create: (context) =>
+              DeleteProductTypeCubit(ProductTypeRepo(ApiService())),
+        ),
+        BlocProvider<AddProductTypeCubit>(
+          create: (context) =>
+              AddProductTypeCubit(ProductTypeRepo(ApiService())),
+        ),
+      ],
+      child: Builder(
+        // <-- هذا هو التعديل الأساسي
+        builder: (multiProviderContext) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Container(
+                width: double.infinity,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    // نستخدم multiProviderContext هنا لضمان وصول صحيح للـ Cubit
+                    multiProviderContext
+                        .read<GetProductTypeCubit>()
+                        .searchProductTypes(query);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'البحث عن نوع منتج...',
+                    border: InputBorder.none,
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        multiProviderContext
+                            .read<GetProductTypeCubit>()
+                            .searchProductTypes('');
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.green,
+              elevation: 0,
+              actions: const [SizedBox(width: 16)],
+            ),
+            body: const ProductTypeBodyView(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.startFloat,
+            floatingActionButton: buildFloatactionBoutton(
+              multiProviderContext,
+              onPressed: () async {
+                // نستخدم multiProviderContext هنا
+                AppRoutes.pushNamed(
+                  multiProviderContext,
+                  AppRoutes.addproducttypeview,
+                );
+              },
+            ),
+          );
         },
       ),
     );
@@ -68,7 +165,8 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
                 'تمت الإضافة بنجاح',
                 color: Palette.success,
               );
-              // context.read<GetProductTypeCubit>().getProductTypes();
+              // بعد الإضافة بنجاح، نقوم بتحديث قائمة المنتجات
+              context.read<GetProductTypeCubit>().getProductTypes();
             } else if (state is AddProductTypeFailure) {
               showCustomSnackBar(context, state.error, color: Palette.error);
             }

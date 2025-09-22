@@ -67,6 +67,8 @@ class ShowErrorWidgetView extends StatelessWidget {
     bool showImage = true,
   }) {
     return Scaffold(
+      backgroundColor: Palette.backgroundColor, // استخدام لون الخلفية الجديد
+
       body: ShowErrorWidgetView(
         errorMessage: errorMessage,
         onRetry: onRetry,

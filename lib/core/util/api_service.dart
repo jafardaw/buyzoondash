@@ -113,10 +113,10 @@ class ApiService {
   Future<Response> update(
     String path, {
     dynamic data,
-    Map<String, dynamic>? queryParameters,
+    // Map<String, dynamic>? queryParameters,
   }) async {
     try {
-      return await _dio.put(path, data: data, queryParameters: queryParameters);
+      return await _dio.put(path, data: data);
     } on DioException catch (e) {
       throw ErrorHandler.handleDioError(e);
     }

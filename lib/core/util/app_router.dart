@@ -1,5 +1,10 @@
+import 'package:buyzoonapp/core/style/color.dart';
+import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/auth/presentation/view/login_view.dart';
+import 'package:buyzoonapp/features/invoice/presentation/view/invoice_view.dart';
+import 'package:buyzoonapp/features/location/Governorates/presentation/view/governorates_page.dart';
 import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
+import 'package:buyzoonapp/features/root/presentation/view/root_view.dart';
 import 'package:buyzoonapp/features/splash/presentation/view/splash_screen.dart';
 import 'package:buyzoonapp/features/users/presentation/view/user_details_view.dart';
 import 'package:buyzoonapp/features/users/presentation/view/users_view.dart';
@@ -11,7 +16,6 @@ import 'package:go_router/go_router.dart';
 class AppRoutes {
   AppRoutes._();
 
-  // Route paths
   static const String splash = '/';
   static const String login = '/login_view';
   static const String rootView = '/root_view';
@@ -22,6 +26,8 @@ class AppRoutes {
   static const String userdetailsview = '/user_details_view';
   static const String broadcastnotificationview =
       '/broadcast_notification_view';
+  static const String governoratespage = '/governorates_page';
+  static const String invoiceview = '/invoice_view';
 
   static GoRouter get router => _router;
 
@@ -37,6 +43,11 @@ class AppRoutes {
         path: login,
         name: login,
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: rootView,
+        name: rootView,
+        builder: (context, state) => const RootView(),
       ),
       GoRoute(
         path: addproducttypeview,
@@ -70,6 +81,19 @@ class AppRoutes {
         path: broadcastnotificationview,
         name: broadcastnotificationview,
         builder: (context, state) => BroadcastNotificationScreen(),
+      ),
+      GoRoute(
+        path: governoratespage,
+        name: governoratespage,
+        builder: (context, state) => GovernoratesPage(),
+      ),
+      GoRoute(
+        path: invoiceview,
+        name: invoiceview,
+        builder: (context, state) {
+          final orderId = state.extra as int;
+          return InvoiceView(orderId: orderId);
+        },
       ),
     ],
   );

@@ -1,7 +1,6 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
-import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
@@ -10,6 +9,7 @@ import 'package:buyzoonapp/features/auth/presentation/manger/login_cubit.dart';
 import 'package:buyzoonapp/features/auth/presentation/manger/login_state.dart';
 import 'package:buyzoonapp/features/auth/repo/login_repo.dart';
 import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
+import 'package:buyzoonapp/features/root/presentation/view/root_view.dart';
 import 'package:buyzoonapp/features/users/presentation/view/users_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocProvider(
       create: (context) => LoginCubit(LoginRepo(ApiService())),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Palette.backgroundColor, // استخدام لون الخلفية الجديد
         body: LoginViewBody(
           formKey: _formKey,
           usernameController: _usernameController,
@@ -140,9 +140,7 @@ class LoginViewBody extends StatelessWidget {
                     // AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => BroadcastNotificationScreen(),
-                      ),
+                      MaterialPageRoute(builder: (context) => RootView()),
                     );
                     showCustomSnackBar(
                       context,

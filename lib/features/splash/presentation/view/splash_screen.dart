@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
-import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
-import 'package:buyzoonapp/product_type/presentation/view/update_product_typ_view.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -51,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
             height: 320,
             width: 320,
             child: Image.asset(
-              'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
+              'assest/images/SAV_٢٠٢٥٠٩١٣_٠١٤٩٤٥-removebg-preview.png',
             ), // The image path
           ),
         ),

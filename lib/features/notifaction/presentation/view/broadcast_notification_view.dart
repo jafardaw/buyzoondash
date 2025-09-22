@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/features/notifaction/presentation/manger/broadcast_cubit.dart';
@@ -27,16 +28,11 @@ class _BroadcastNotificationScreenState
     return BlocProvider(
       create: (context) => BroadcastCubit(BroadcastRepo(ApiService())),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'إرسال إشعار جماعي',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-          elevation: 0,
-          leading: const BackButton(color: Colors.white),
+        appBar: const AppareWidget(
+          automaticallyImplyLeading: true,
+          title: 'إرسال إشعار جماعي',
         ),
+
         body: BlocListener<BroadcastCubit, BroadcastState>(
           listener: (context, state) {
             if (state is BroadcastSuccess) {
@@ -58,12 +54,25 @@ class _BroadcastNotificationScreenState
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // أيقونة كبيرة مع تأثير
                     const Icon(
                       Icons.notifications_active_outlined,
                       size: 100,
                       color: Palette.primary,
                     ),
+                    const SizedBox(height: 20),
+                    // عنوان توضيحي
+                    const Text(
+                      'أرسل إشعارًا لجميع المستخدمين',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.secandry,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 40),
+                    // حقل عنوان الإشعار
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
@@ -86,6 +95,7 @@ class _BroadcastNotificationScreenState
                       ),
                     ),
                     const SizedBox(height: 20),
+                    // حقل محتوى الإشعار
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 20,
@@ -95,7 +105,7 @@ class _BroadcastNotificationScreenState
                         controller: _bodyController,
                         labelText: 'محتوى الإشعار',
                         hintText: 'أدخل محتوى الإشعار هنا',
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.description,
                           color: Palette.secandry,
                         ),
@@ -109,6 +119,7 @@ class _BroadcastNotificationScreenState
                       ),
                     ),
                     const SizedBox(height: 40),
+                    // زر الإرسال
                     BlocBuilder<BroadcastCubit, BroadcastState>(
                       builder: (context, state) {
                         if (state is BroadcastLoading) {

@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
@@ -22,18 +23,7 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // استخدم MultiBlocProvider لتوفير كلا الـ Cubits
-    return
-    //  MultiBlocProvider(
-    //   providers: [
-    //     BlocProvider<AddProductTypeCubit>(
-    //       create: (context) => AddProductTypeCubit(ProductTypeRepo(ApiService())),
-    //     ),
-    //     BlocProvider<GetProductTypeCubit>(
-    //       create: (context) => GetProductTypeCubit(ProductTypeRepo(ApiService())),
-    //     ),
-    //   ],
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text(
           'إضافة منتج',

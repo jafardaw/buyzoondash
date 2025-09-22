@@ -2,10 +2,13 @@ import 'package:buyzoonapp/core/func/alert_dialog.dart';
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
+import 'package:buyzoonapp/features/ban_users/presentation/view/ban_page.dart';
 
 import 'package:buyzoonapp/features/users/presentation/manger/delete_user_cubit.dart';
 import 'package:buyzoonapp/features/users/presentation/manger/user_details_cubit.dart';
+import 'package:buyzoonapp/features/users/presentation/manger/users_cubit.dart';
 import 'package:buyzoonapp/features/users/repo/users_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,16 +32,11 @@ class UserDetailsScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'تفاصيل المستخدم',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.blue,
-          elevation: 0,
-          leading: const BackButton(color: Colors.white),
+        appBar: const AppareWidget(
+          automaticallyImplyLeading: true,
+          title: 'تفاصيل المستخدم',
         ),
+
         body: BlocListener<DeleteUserCubit, DeleteUserState>(
           listener: (context, state) {
             if (state is DeleteUserSuccess) {
