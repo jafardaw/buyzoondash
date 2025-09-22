@@ -9,6 +9,13 @@ class ProductModel {
   final int? count;
   final bool? allowCashWallet;
   final double price;
+  //  "original_price": "171.00",
+  //         "profit_ratio": "0.07",
+  //         "profit": 11.97,
+  final double originalprice;
+  final double profitratio;
+  final double profit;
+
   final double rating;
   final bool? ban;
   final double refundRate;
@@ -25,6 +32,9 @@ class ProductModel {
     this.count,
     this.allowCashWallet,
     required this.price,
+    required this.originalprice,
+    required this.profitratio,
+    required this.profit,
     required this.rating,
     this.ban,
     required this.refundRate,
@@ -45,6 +55,13 @@ class ProductModel {
       count: json['count'] as int?,
       allowCashWallet: json['allow_cash_wallet'] as bool?,
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+
+      originalprice:
+          double.tryParse(json['original_price']?.toString() ?? '0') ?? 0.0,
+
+      profitratio: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      profit: double.tryParse(json['profit']?.toString() ?? '0') ?? 0.0,
+
       rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
       ban: json['ban'] as bool?,
       refundRate:

@@ -112,9 +112,50 @@ class AddProductRepository {
 
       await apiService.post('api/products/$productId', formData);
     } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException caught: ${e.message}');
+      }
       throw ErrorHandler.handleDioError(e);
     } catch (e) {
-      throw Exception('An unexpected error occurred: $e');
+      if (kDebugMode) {
+        print('General Exception caught: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<ProductModel>> searchRawMaterials({
+    required int idype,
+    String? name,
+    String? description,
+    String? status,
+    double? minPrice,
+    double? maxPrice,
+    double? minrating,
+  }) async {
+    final queryParameters = <String, dynamic>{};
+
+    if (name != null && name.isNotEmpty) queryParameters['search'] = name;
+    if (description != null && description.isNotEmpty) {
+      queryParameters['description'] = description;
+    }
+    if (status != null && status.isNotEmpty) queryParameters['status'] = status;
+    if (minPrice != null) queryParameters['min_price'] = minPrice;
+    if (maxPrice != null) queryParameters['max_price'] = maxPrice;
+    if (minrating != null) {
+      queryParameters['min_rating'] = minrating;
+    }
+
+    final response = await apiService.get(
+      'api/products/?product_type=$idype',
+      queryParameters: queryParameters,
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = response.data['data'];
+      return data.map((json) => ProductModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to search raw materials: ${response.statusCode}');
     }
   }
 }

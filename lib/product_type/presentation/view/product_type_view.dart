@@ -7,6 +7,12 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/core/widget/empty_view_list.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
+import 'package:buyzoonapp/features/Order/presentation/view/order_list_view.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/search_cubit/search_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/product_list_view.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/search_product_list.dart';
+import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
@@ -14,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/product_type/data/model/product_type_model.dart';
+<<<<<<< HEAD
 
 // class ProductTypesScreen extends StatefulWidget {
 //   const ProductTypesScreen({super.key});
@@ -50,6 +57,8 @@ import 'package:buyzoonapp/product_type/data/model/product_type_model.dart';
 
 import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+=======
+>>>>>>> 06f1b960f53bc1214654ea496913a1de2919ffd6
 
 class ProductTypesScreen extends StatefulWidget {
   const ProductTypesScreen({super.key});
@@ -69,6 +78,7 @@ class _ProductTypesScreenState extends State<ProductTypesScreen> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return MultiBlocProvider(
       providers: [
         BlocProvider<GetProductTypeCubit>(
@@ -139,6 +149,36 @@ class _ProductTypesScreenState extends State<ProductTypesScreen> {
               },
             ),
           );
+=======
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrdersView()),
+              );
+            },
+            icon: Icon(Icons.assist_walker),
+          ),
+        ],
+        title: const Text(
+          'أنواع المنتجات',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.green,
+        elevation: 0,
+        leading: const BackButton(color: Colors.white),
+      ),
+      body: const ProductTypeBodyView(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: buildFloatactionBoutton(
+        context,
+        onPressed: () {
+          AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
+>>>>>>> 06f1b960f53bc1214654ea496913a1de2919ffd6
         },
       ),
     );
@@ -204,7 +244,8 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
                     crossAxisCount: calculateCrossAxisCount(context),
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 1.0,
+                    childAspectRatio:
+                        0.7, // تقليل النسبة لإعطاء مساحة أكبر للارتفاع
                   ),
                   itemBuilder: (context, index) {
                     final productType = state.productTypes[index];
@@ -215,7 +256,7 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
                   builder: (context, deleteState) {
                     if (deleteState is DeleteProductTypeLoading) {
                       return Container(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         child: const Center(child: CircularProgressIndicator()),
                       );
                     }
@@ -256,7 +297,30 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
         'icon': const Icon(Icons.view_list, color: Palette.secandry),
         'title': 'عرض المنتجات',
         'onTap': () {
+<<<<<<< HEAD
           // Placeholder for navigation to products screen
+=======
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ProductSearchCubit>(
+                    create: (context) => ProductSearchCubit(
+                      repository: AddProductRepository(ApiService()),
+                    ),
+                  ),
+
+                  BlocProvider<AddProductCubit>(
+                    create: (context) =>
+                        AddProductCubit(AddProductRepository(ApiService())),
+                  ),
+                ],
+                child: ProductSearchPage(idtype: widget.productType.id),
+              ),
+            ),
+          );
+>>>>>>> 06f1b960f53bc1214654ea496913a1de2919ffd6
         },
       },
       {
@@ -307,6 +371,7 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
       child: Card(
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+<<<<<<< HEAD
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -331,6 +396,43 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
+=======
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Palette.secandry.withValues(alpha: 0.1),
+                  border: Border.all(color: Palette.secandry, width: 2),
+                ),
+                child: const Icon(
+                  Icons.category,
+                  color: Palette.secandry,
+                  size: 35,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: Text(
+                  widget.productType.name,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    height: 1.2,
+                  ),
+                ),
+              ),
+            ],
+          ),
+>>>>>>> 06f1b960f53bc1214654ea496913a1de2919ffd6
         ),
       ),
     );

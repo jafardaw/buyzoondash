@@ -26,7 +26,7 @@ class LoginRepo {
         "username_or_phone": usernameOrPhone,
         "password": password,
         "fcm_token":
-            "fw8qlzt-Te22Dh5tz7jhLF:APA91bGrZ0SIUDaZ1DSkZmjJGYCJAZtCXWc6pWnhBLUXglUxf0sM5FkCPXDLhNOkByyyRzrcQcJVUwYpLJ-cDA4VYJANp60ZQRwLHo5E3lK3slEdkJ2aBYc",
+            "fEVTDUCqSbuLPIBJ4sdLtX:APA91bGr8w3VewBL_J1aX0RTXPwQ2vmXfItXlAYfpTU4g475IprYkZEAgu62enTA_buW23fozh2dnuyzP8lmUWkZTMRWVrNfIGt3POw8Ly1gU_rrYoDGRVY",
       });
 
       final data = response.data;
