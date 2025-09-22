@@ -1,7 +1,11 @@
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
+import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_cubit.dart';
+import 'package:buyzoonapp/features/Order/repo/order_repo.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/get_cubit/get_all_poduct_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/search_cubit/search_product_cubit.dart';
+import 'package:buyzoonapp/features/productlist/presentation/view/manager/updatecubit/update_product_cubit.dart';
 import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/firebase_options.dart';
 import 'package:buyzoonapp/notifaction_local.dart';
@@ -18,10 +22,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initializeLocalNotifications();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await initializeLocalNotifications();
 
-  await setupNotifications();
+  // await setupNotifications();
   runApp(const MyApp());
 }
 
@@ -32,14 +36,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ProductsCubit>(
-          create: (context) =>
-              ProductsCubit(AddProductRepository(ApiService())),
+        BlocProvider<OrdersCubit>(
+          create: (context) => OrdersCubit(OrdersRepository(ApiService())),
         ),
-        BlocProvider<AddProductCubit>(
-          create: (context) =>
-              AddProductCubit(AddProductRepository(ApiService())),
-        ),
+        // BlocProvider<UpdateProductCubit>(
+        //   create: (context) =>
+        //       UpdateProductCubit(AddProductRepository(ApiService())),
+        // ),
+        // BlocProvider<ProductSearchCubit>(
+        //   create: (context) => ProductSearchCubit(
+        //     repository: AddProductRepository(ApiService()),
+        //   ),
+        // ),
+        // BlocProvider<ProductsCubit>(
+        //   create: (context) =>
+        //       ProductsCubit(AddProductRepository(ApiService())),
+        // ),
+        // BlocProvider<AddProductCubit>(
+        //   create: (context) =>
+        //       AddProductCubit(AddProductRepository(ApiService())),
+        // ),
         BlocProvider<GetProductTypeCubit>(
           create: (context) =>
               GetProductTypeCubit(ProductTypeRepo(ApiService()))

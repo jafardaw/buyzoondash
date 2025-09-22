@@ -35,11 +35,7 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
       );
       emit(UpdateProductSuccess());
     } catch (error) {
-      emit(
-        UpdateProductFailure(
-          errorMessage: error.toString().replaceFirst('Exception: ', ''),
-        ),
-      );
+      emit(UpdateProductFailure(errorMessage: error.toString()));
     }
   }
 }

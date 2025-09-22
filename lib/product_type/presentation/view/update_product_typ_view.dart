@@ -2,7 +2,6 @@ import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
-import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/update_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:flutter/material.dart';

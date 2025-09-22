@@ -2,18 +2,15 @@
 
 import 'dart:typed_data';
 import 'package:buyzoonapp/core/style/color.dart';
-import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_state.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
-import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/imagepicker/imagepicker.dart';
-import 'package:dio/dio.dart';
 
 class AddNewProduct extends StatefulWidget {
   const AddNewProduct({super.key, required this.id});
@@ -98,7 +95,8 @@ class _AddNewProductState extends State<AddNewProduct> {
                 backgroundColor: Palette.primary,
               ),
             );
-            Navigator.pop(context);
+
+            Navigator.pop(context, true);
           } else if (state is AddProductFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
