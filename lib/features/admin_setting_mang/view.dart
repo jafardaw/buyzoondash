@@ -23,11 +23,11 @@ class AdminDashboardScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 1.2,
+          childAspectRatio: 0.89,
           children: [
             _buildDashboardCard(
               icon: Icons.people,
-              title: 'إدارة المستخدمين',
+              title: ' المستخدمين',
               subtitle: ' مستخدم',
               color: Colors.blue,
               onTap: () {
@@ -89,33 +89,37 @@ class AdminDashboardScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  shape: BoxShape.circle,
+          padding: const EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 30, color: color),
                 ),
-                child: Icon(icon, size: 30, color: color),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: Styles.textStyle14.copyWith(color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: Styles.textStyle16.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: Styles.textStyle14.copyWith(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -94,45 +94,90 @@ class FinancialDashboardPage extends StatelessWidget {
   }
 
   Widget _buildDateFilter(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 600;
+
     return Card(
-      elevation: 4,
+      elevation: 7,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'الفترة الزمنية: ${DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 30)))} - ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            TextButton.icon(
-              onPressed: () async {
-                final DateTimeRange? picked = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(2024),
-                  lastDate: DateTime.now(),
-                );
-                if (picked != null) {
-                  final String from = DateFormat(
-                    'yyyy-MM-dd',
-                  ).format(picked.start);
-                  final String to = DateFormat('yyyy-MM-dd').format(picked.end);
-                  // استدعاء الـ Cubit مع التواريخ الجديدة
-                  if (context.mounted) {
-                    context.read<FinancialReportCubit>().getFinancialReport(
-                      timeline: 'custom',
-                      from: from,
-                      to: to,
-                    );
-                  }
-                }
-              },
-              icon: const Icon(Icons.calendar_today, size: 20),
-              label: const Text('تغيير'),
-            ),
-          ],
-        ),
+        // هنا نقوم باختيار الويدجت المناسب حسب حجم الشاشة
+        child: isSmallScreen
+            ? filterDateSmullScreen(context)
+            : flterDateLargSreen(context),
       ),
+    );
+  }
+
+  Column filterDateSmullScreen(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'الفترة الزمنية: ${DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 30)))} - ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        TextButton.icon(
+          onPressed: () async {
+            // ... (نفس الكود السابق لفتح محدد التاريخ)
+            final DateTimeRange? picked = await showDateRangePicker(
+              context: context,
+              firstDate: DateTime(2024),
+              lastDate: DateTime.now(),
+            );
+            if (picked != null) {
+              final String from = DateFormat('yyyy-MM-dd').format(picked.start);
+              final String to = DateFormat('yyyy-MM-dd').format(picked.end);
+              if (context.mounted) {
+                context.read<FinancialReportCubit>().getFinancialReport(
+                  timeline: 'custom',
+                  from: from,
+                  to: to,
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.calendar_today, size: 20),
+          label: const Text('تغيير'),
+        ),
+      ],
+    );
+  }
+
+  Row flterDateLargSreen(BuildContext context) {
+    return Row(
+      // تصميم أفقي للشاشات الأكبر
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'الفترة الزمنية: ${DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 30)))} - ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        TextButton.icon(
+          onPressed: () async {
+            final DateTimeRange? picked = await showDateRangePicker(
+              context: context,
+              firstDate: DateTime(2024),
+              lastDate: DateTime.now(),
+            );
+            if (picked != null) {
+              final String from = DateFormat('yyyy-MM-dd').format(picked.start);
+              final String to = DateFormat('yyyy-MM-dd').format(picked.end);
+              if (context.mounted) {
+                context.read<FinancialReportCubit>().getFinancialReport(
+                  timeline: 'custom',
+                  from: from,
+                  to: to,
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.calendar_today, size: 20),
+          label: const Text('تغيير'),
+        ),
+      ],
     );
   }
 
