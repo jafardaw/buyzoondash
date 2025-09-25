@@ -42,19 +42,14 @@ class _UpdateProductTypeScreenState extends State<UpdateProductTypView> {
 
         body: BlocListener<UpdateProductTypeCubit, UpdateProductTypeState>(
           listener: (context, state) {
-            if (state is UpdateProductTypeLoading) {
+            if (state is UpdateProductTypeSuccess) {
               showCustomSnackBar(
                 context,
-                'جاري الإضافة...',
-                color: Palette.secandry,
-              );
-            } else if (state is UpdateProductTypeSuccess) {
-              showCustomSnackBar(
-                context,
-                'تمت الإضافة بنجاح!',
+                'تمت  التعديل بنجاح!',
                 color: Palette.success,
               );
-              nameController.clear();
+              // nameController.clear();
+              Navigator.pop(context, true);
             } else if (state is UpdateProductTypeFailure) {
               showCustomSnackBar(
                 context,

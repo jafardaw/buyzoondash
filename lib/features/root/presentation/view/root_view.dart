@@ -33,12 +33,12 @@ class RootViewState extends State<RootView> {
       body: _pages[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
         index: _currentIndex,
-        height: 53.5,
+        height: 50,
         items: <Widget>[
-          Icon(Icons.home, size: 30, color: Colors.white),
-          Icon(Icons.lock, size: 30, color: Colors.white),
+          Icon(Icons.shopping_bag, size: 30, color: Colors.white),
+          Icon(Icons.person, size: 30, color: Colors.white),
           Icon(Icons.category, size: 30, color: Colors.white),
-          Icon(Icons.notifications, size: 30, color: Colors.white),
+          Icon(Icons.location_city, size: 30, color: Colors.white),
           Icon(Icons.more_horiz, size: 30, color: Colors.white),
         ],
         color: Palette.primary,

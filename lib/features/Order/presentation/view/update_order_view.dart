@@ -128,7 +128,9 @@ class _UpdateOrderViewBodyState extends State<UpdateOrderViewBody> {
                       return Center(child: const LoadingViewWidget());
                     }
                     return CustomButton(
-                      onTap: _updateOrder,
+                      onTap: () {
+                        _updateOrder;
+                      },
                       text: 'تعديل الطلب',
                     );
                   },

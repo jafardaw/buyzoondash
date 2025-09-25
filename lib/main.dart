@@ -2,11 +2,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_cubit.dart';
 import 'package:buyzoonapp/features/Order/repo/order_repo.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/get_cubit/get_all_poduct_cubit.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/search_cubit/search_product_cubit.dart';
-import 'package:buyzoonapp/features/productlist/presentation/view/manager/updatecubit/update_product_cubit.dart';
-import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
+
 import 'package:buyzoonapp/firebase_options.dart';
 import 'package:buyzoonapp/notifaction_local.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
@@ -75,21 +71,24 @@ class MyApp extends StatelessWidget {
               UpdateProductTypeCubit(ProductTypeRepo(ApiService())),
         ),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Splash Screen Demo',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('ar'), // دعم اللغة العربية
-          Locale('en'), // دعم اللغة الإنجليزية
-        ],
-        locale: const Locale('ar'),
-        routerConfig: AppRoutes.router,
+      child: SafeArea(
+        top: false,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Splash Screen Demo',
+          theme: ThemeData(primarySwatch: Colors.blue),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('ar'), // دعم اللغة العربية
+            Locale('en'), // دعم اللغة الإنجليزية
+          ],
+          locale: const Locale('ar'),
+          routerConfig: AppRoutes.router,
+        ),
       ),
     );
   }

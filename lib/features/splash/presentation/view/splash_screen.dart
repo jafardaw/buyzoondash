@@ -29,16 +29,18 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = prefs.getString('token');
 
       if (token == null || token.isEmpty) {
-        AppRoutes.goNamed(context, AppRoutes.login);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginView()),
+        );
       } else {
-        AppRoutes.goNamed(context, AppRoutes.rootView);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) =>
+                LoginView(), // Replace with your main screen widget
+          ),
+        );
       }
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) =>
-      //         ProductTypesScreen(), // Replace with your main screen widget
-      //   ),
-      // );
     });
   }
 

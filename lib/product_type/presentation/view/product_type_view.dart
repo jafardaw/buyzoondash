@@ -15,6 +15,7 @@ import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/view/update_product_typ_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
@@ -194,7 +195,7 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
                     crossAxisCount: calculateCrossAxisCount(context),
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: 1.0,
+                    childAspectRatio: 0.78,
                   ),
                   itemBuilder: (context, index) {
                     final productType = state.productTypes[index];
@@ -275,7 +276,20 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
         'icon': const Icon(Icons.edit, color: Palette.primary),
         'title': 'تعديل',
         'onTap': () {
-          // AppRoutes.pushNamed(context, AppRoutes.updateproducttypview);
+          print(widget.productType.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UpdateProductTypView(
+                id: widget.productType.id,
+                name: widget.productType.name,
+              ),
+            ),
+          ).then((result) {
+            if (result == true) {
+              context.read<GetProductTypeCubit>().getProductTypes();
+            }
+          });
         },
       },
       {
@@ -318,30 +332,35 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
       child: Card(
         elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Palette.secandry.withOpacity(0.1),
-                border: Border.all(color: Palette.secandry, width: 2),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Palette.secandry.withValues(alpha: 0.1),
+                  border: Border.all(color: Palette.secandry, width: 2),
+                ),
+                child: const Icon(
+                  Icons.category,
+                  color: Palette.secandry,
+                  size: 40,
+                ),
               ),
-              child: const Icon(
-                Icons.category,
-                color: Palette.secandry,
-                size: 40,
+              const SizedBox(height: 10),
+              Text(
+                widget.productType.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              widget.productType.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

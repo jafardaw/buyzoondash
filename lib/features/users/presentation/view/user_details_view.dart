@@ -57,7 +57,12 @@ class UserDetailsScreen extends StatelessWidget {
           child: BlocBuilder<UserDetailsCubit, UserDetailsState>(
             builder: (context, state) {
               if (state is UserDetailsLoading) {
-                return const LoadingViewWidget();
+                return LoadingViewWidget(
+                  type: LoadingType.imageShake,
+                  imagePath:
+                      'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
+                  size: 200, // حجم الصورة
+                );
               } else if (state is UserDetailsSuccess) {
                 final user = state.user;
                 return Padding(

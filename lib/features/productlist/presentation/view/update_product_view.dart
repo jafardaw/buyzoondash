@@ -285,15 +285,17 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
                       });
                     },
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 14),
                   BlocBuilder<UpdateProductCubit, UpdateProductState>(
                     builder: (blocContext, state) {
-                      bool isLoading = state is UpdateProductLoading;
-                      if (isLoading) {
-                        return Center(child: const LoadingViewWidget());
+                      if (state is UpdateProductLoading) {
+                        return LoadingViewWidget();
                       }
+
                       return CustomButton(
-                        onTap: _submitForm(blocContext),
+                        onTap: () {
+                          _submitForm(blocContext);
+                        },
                         text: 'حفظ التعديلات',
                       );
                     },

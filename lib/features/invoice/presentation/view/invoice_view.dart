@@ -3,6 +3,7 @@
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/empty_view_list.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/invoice/data/model/invoice_model.dart';
@@ -52,6 +53,11 @@ class InvoiceView extends StatelessWidget {
               );
             } else if (state is InvoiceSuccess) {
               final invoice = state.invoice;
+
+              if (invoice.items!.isEmpty) {
+                return EmptyListViews(text: 'لا يوجد فواتير');
+              }
+
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24.0,
@@ -86,7 +92,7 @@ class InvoiceView extends StatelessWidget {
     );
   }
 
-  Widget _buildInvoiceHeader(BuildContext context, invoice) {
+  Widget _buildInvoiceHeader(BuildContext context, InvoiceModel invoice) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -118,7 +124,7 @@ class InvoiceView extends StatelessWidget {
             _buildInfoRow(
               context,
               'الحالة:',
-              invoice.status,
+              invoice.status!,
               color: invoice.status == 'paid'
                   ? Colors.green.shade700
                   : Colors.red.shade700,
@@ -127,9 +133,11 @@ class InvoiceView extends StatelessWidget {
             _buildInfoRow(
               context,
               'تاريخ الدفع:',
-              intl.DateFormat(
-                'yyyy/MM/dd HH:mm',
-              ).format(DateTime.parse(invoice.paidAt)),
+              (invoice.paidAt != null && invoice.paidAt!.isNotEmpty)
+                  ? intl.DateFormat(
+                      'yyyy/MM/dd HH:mm',
+                    ).format(DateTime.parse(invoice.paidAt!))
+                  : 'غير مدفوع',
             ),
           ],
         ),
@@ -137,14 +145,14 @@ class InvoiceView extends StatelessWidget {
     );
   }
 
-  Widget _buildProductTable(BuildContext context, invoice) {
+  Widget _buildProductTable(BuildContext context, InvoiceModel invoice) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -159,15 +167,15 @@ class InvoiceView extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: invoice.items.length,
+              itemCount: invoice.items!.length,
               itemBuilder: (context, index) {
-                final item = invoice.items[index];
+                final item = invoice.items![index];
                 return _buildProductItem(
                   context,
-                  item.name,
-                  item.unitPrice,
+                  item.name!,
+                  item.unitPrice!,
                   item.quantity.toString(),
-                  item.totalPrice,
+                  item.totalPrice!,
                 );
               },
             ),
@@ -186,7 +194,7 @@ class InvoiceView extends StatelessWidget {
         padding: const EdgeInsets.all(25.0),
         child: Column(
           children: [
-            _buildTotalRow(context, 'المجموع الفرعي', invoice.totalPrice),
+            _buildTotalRow(context, 'المجموع الفرعي', invoice.totalPrice!),
             const SizedBox(height: 10),
             _buildTotalRow(context, 'الضرائب (0%)', '0.00'),
             const SizedBox(height: 15),
@@ -218,7 +226,9 @@ class InvoiceView extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.8),
           ),
         ),
         Text(

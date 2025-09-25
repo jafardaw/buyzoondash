@@ -139,7 +139,7 @@ class LoginViewBody extends StatelessWidget {
                 listener: (context, state) {
                   if (state is LoginSuccess) {
                     // AppRoutes.pushNamed(context, AppRoutes.addproducttypeview);
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => RootView()),
                     );

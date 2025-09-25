@@ -207,17 +207,23 @@ class _AddNewProductState extends State<AddNewProduct> {
                     });
                   },
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 14),
                 // هنا يتم التعديل على الزر
                 BlocBuilder<AddProductCubit, AddProductState>(
                   builder: (blocContext, state) {
-                    bool isLoading = state is AddProductLoading;
+                    // bool isLoading = state is AddProductLoading;
 
-                    if (isLoading) {
+                    // if (isLoading) {
+                    //   return Center(child: const LoadingViewWidget());
+                    // }
+                    if (state is AddProductLoading) {
                       return Center(child: const LoadingViewWidget());
                     }
+
                     return CustomButton(
-                      onTap: _submitForm(blocContext),
+                      onTap: () {
+                        _submitForm(blocContext);
+                      },
                       text: 'حفظ المنتج',
                     );
                   },

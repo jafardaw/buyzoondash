@@ -119,7 +119,7 @@ class _UsersBodyViewState extends State<UsersBodyView> {
             padding: const EdgeInsets.all(16),
             itemCount: state.users.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: calculateCrossAxisCount(context),
+              crossAxisCount: calculateCrossAxisCountuser(context),
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
               childAspectRatio: 0.68,
