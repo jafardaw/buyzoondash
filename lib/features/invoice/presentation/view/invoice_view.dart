@@ -1,6 +1,7 @@
 // lib/features/invoice/presentation/view/invoice_view.dart
 
 import 'package:buyzoonapp/core/style/color.dart';
+import 'package:buyzoonapp/core/style/styles.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/empty_view_list.dart';
@@ -103,17 +104,17 @@ class InvoiceView extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.receipt_long,
-                  color: Palette.primary, // استخدام اللون الرئيسي الجديد
-                  size: 30,
-                ),
+                Icon(Icons.receipt_long, color: Palette.primary, size: 30),
                 const SizedBox(width: 15),
-                Text(
-                  'فاتورة #${invoice.invoiceNumber}',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Palette.primary, // استخدام اللون الرئيسي
+                // تم تعديل هذا الجزء للسماح للنص بالالتفاف
+                Expanded(
+                  child: Text(
+                    'فاتورة #${invoice.invoiceNumber}',
+                    style: Styles.textStyle20.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Palette.primary,
+                    ),
+                    overflow: TextOverflow.ellipsis, // لمنع تجاوز النص
                   ),
                 ),
               ],
@@ -309,7 +310,7 @@ class InvoiceView extends StatelessWidget {
             flex: 1,
             child: Text(
               quantity,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ),
@@ -317,9 +318,7 @@ class InvoiceView extends StatelessWidget {
             flex: 2,
             child: Text(
               price,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.end,
             ),
           ),
@@ -339,20 +338,17 @@ class InvoiceView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            fontSize: fontSize,
+        Expanded(
+          child: Text(
+            label,
+            style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
+        const SizedBox(width: 8), // مسافة بين النصين
         Text(
           value,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-
-            fontSize: fontSize,
-          ),
+          style: Styles.textStyle16.copyWith(fontWeight: FontWeight.bold),
         ),
       ],
     );

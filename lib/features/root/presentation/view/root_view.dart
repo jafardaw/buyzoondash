@@ -2,8 +2,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/order_list_view.dart';
 import 'package:buyzoonapp/features/admin_setting_mang/view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/governorates_page.dart';
-import 'package:buyzoonapp/features/notifaction/presentation/view/broadcast_notification_view.dart';
-import 'package:buyzoonapp/features/report/presentation/view/financial_dashboard_page.dart';
+
 import 'package:buyzoonapp/features/users/presentation/view/users_view.dart';
 import 'package:buyzoonapp/product_type/presentation/view/product_type_view.dart';
 import 'package:flutter/material.dart';

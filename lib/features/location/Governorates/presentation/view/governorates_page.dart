@@ -33,7 +33,6 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
     super.dispose();
   }
 
-  // This method now takes a context parameter
   void _onScroll(BuildContext context) {
     if (_isBottom) {
       context.read<GovernoratesListCubit>().loadMoreGovernorates();
@@ -80,38 +79,20 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
               automaticallyImplyLeading: true,
               title: 'المحافظات',
               actions: [
-                // IconButton(
-                //   icon: Icon(Icons.add_circle_outline),
-                //   onPressed: () async {
-                //     final result = await Navigator.push(
-                //       providerContext,
-                //       MaterialPageRoute(
-                //         builder: (ctx) => const AddGovernoratePage(),
-                //       ),
-                //     );
-                //     if (result == true) {
-                //       if (mounted) {
-                //         providerContext
-                //             .read<GovernoratesListCubit>()
-                //             .fetchGovernorates();
-                //       }
-                //     }
-                //   },
-                // ),
                 IconButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BroadcastNotificationScreen(),
+                        builder: (context) =>
+                            const BroadcastNotificationScreen(),
                       ),
                     );
                   },
-                  icon: Icon(Icons.notifications),
+                  icon: const Icon(Icons.notifications),
                 ),
               ],
             ),
-
             body: BlocBuilder<GovernoratesListCubit, GovernoratesListState>(
               builder: (cubitContext, state) {
                 _scrollController.removeListener(() => _onScroll(cubitContext));
@@ -121,17 +102,17 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                   return LoadingViewWidget(
                     type: LoadingType.imageShake,
                     imagePath:
-                        'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
-                    size: 200, // حجم الصورة
-                    color: Palette.primary, // اللون
+                        'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
+                    size: 200,
+                    color: Palette.primary,
                   );
                 } else if (state is GovernoratesListFailure) {
                   return ShowErrorWidgetView.fullScreenError(
                     errorMessage: state.error,
                     onRetry: () {
-                      GovernoratesListCubit(
-                        GovernorateRepo(ApiService()),
-                      ).fetchGovernorates();
+                      cubitContext
+                          .read<GovernoratesListCubit>()
+                          .fetchGovernorates();
                     },
                   );
                 } else if (state is GovernoratesListSuccess) {
@@ -141,13 +122,13 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                         state.governorates.length + (state.hasNextPage ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index >= state.governorates.length) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.0),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: LoadingViewWidget(
                             type: LoadingType.imageShake,
                             imagePath:
-                                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png', // مسار صورتك
-                            size: 200, // حجم الصورة
+                                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
+                            size: 200,
                           ),
                         );
                       }
@@ -180,25 +161,52 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                           }
                         },
                         onDeletePressed: () {
-                          cubitContext
-                              .read<GovernoratesListCubit>()
-                              .deleteGovernorate(governorate.id)
-                              .then((_) {
-                                ScaffoldMessenger.of(cubitContext).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('تم الحذف بنجاح!'),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                              })
-                              .catchError((error) {
-                                ScaffoldMessenger.of(cubitContext).showSnackBar(
-                                  SnackBar(
-                                    content: Text('فشل الحذف: $error'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              });
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) => AlertDialog(
+                              title: const Text('تأكيد الحذف'),
+                              content: Text(
+                                'هل أنت متأكد من حذف ${governorate.name}؟',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(dialogContext),
+                                  child: const Text('إلغاء'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    cubitContext
+                                        .read<GovernoratesListCubit>()
+                                        .deleteGovernorate(governorate.id)
+                                        .then((_) {
+                                          ScaffoldMessenger.of(
+                                            cubitContext,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('تم الحذف بنجاح!'),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        })
+                                        .catchError((error) {
+                                          ScaffoldMessenger.of(
+                                            cubitContext,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'فشل الحذف: $error',
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: const Text('حذف'),
+                                ),
+                              ],
+                            ),
+                          );
                         },
                       );
                     },

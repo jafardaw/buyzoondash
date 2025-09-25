@@ -23,11 +23,11 @@ class AdminDashboardScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.88,
+          childAspectRatio: 0.89,
           children: [
             _buildDashboardCard(
               icon: Icons.people,
-              title: 'إدارة المستخدمين',
+              title: ' المستخدمين',
               subtitle: ' مستخدم',
               color: Colors.blue,
               onTap: () {
@@ -89,9 +89,9 @@ class AdminDashboardScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

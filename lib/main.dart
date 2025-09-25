@@ -19,9 +19,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await initializeLocalNotifications();
+  // await initializeLocalNotifications();
 
-  await setupNotifications();
+  // await setupNotifications();
   runApp(const MyApp());
 }
 

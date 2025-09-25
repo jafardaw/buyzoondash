@@ -60,7 +60,7 @@ class _CitiesPageState extends State<CitiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: buildFloatactionBoutton(
         context,
         onPressed: () async {

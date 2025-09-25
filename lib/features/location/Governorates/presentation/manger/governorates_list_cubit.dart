@@ -62,9 +62,7 @@ class GovernoratesListCubit extends Cubit<GovernoratesListState> {
   }
 
   Future<void> deleteGovernorate(int id) async {
-    try {
-      await _governorateRepo.deleteGovernorate(id: id);
-      await fetchGovernorates();
-    } catch (e) {}
+    await _governorateRepo.deleteGovernorate(id: id);
+    await fetchGovernorates();
   }
 }

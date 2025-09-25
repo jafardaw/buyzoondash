@@ -4,7 +4,6 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/city_model.dart';
-import 'package:buyzoonapp/features/location/Governorates/data/model/region_model.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/delete_region_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/delete_region_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_region_cubit.dart';
