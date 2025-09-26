@@ -6,6 +6,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
+import 'package:buyzoonapp/features/location/Governorates/data/model/governorate_model.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/governorates_list_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/governorates_list_state.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/view/add_governorate_page.dart';
@@ -160,54 +161,73 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
                                 .fetchGovernorates();
                           }
                         },
+
                         onDeletePressed: () {
                           showDialog(
                             context: context,
-                            builder: (dialogContext) => AlertDialog(
-                              title: const Text('تأكيد الحذف'),
-                              content: Text(
-                                'هل أنت متأكد من حذف ${governorate.name}؟',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(dialogContext),
-                                  child: const Text('إلغاء'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(dialogContext);
-                                    cubitContext
-                                        .read<GovernoratesListCubit>()
-                                        .deleteGovernorate(governorate.id)
-                                        .then((_) {
-                                          ScaffoldMessenger.of(
-                                            cubitContext,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text('تم الحذف بنجاح!'),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          );
-                                        })
-                                        .catchError((error) {
-                                          ScaffoldMessenger.of(
-                                            cubitContext,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'فشل الحذف: $error',
-                                              ),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        });
-                                  },
-                                  child: const Text('حذف'),
-                                ),
-                              ],
-                            ),
+                            builder: (dialogContext) {
+                              var isDeleting = false;
+
+                              return deletWidget(
+                                governorate,
+                                isDeleting,
+                                cubitContext,
+                              );
+                            },
                           );
                         },
+                        // onDeletePressed: () {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (dialogContext) => AlertDialog(
+                        //       title: const Text('تأكيد الحذف'),
+                        //       content: Text(
+                        //         'هل أنت متأكد أنك تريد حذف محافظة ${governorate.name}؟',
+                        //       ),
+                        //       actions: [
+                        //         TextButton(
+                        //           onPressed: () => Navigator.pop(dialogContext),
+                        //           child: const Text('إلغاء'),
+                        //         ),
+
+                        //         ElevatedButton(
+                        //           onPressed: () {
+                        //             Navigator.pop(dialogContext);
+                        //             cubitContext
+                        //                 .read<GovernoratesListCubit>()
+                        //                 .deleteGovernorate(governorate.id)
+                        //                 .then((_) {
+                        //                   ScaffoldMessenger.of(
+                        //                     cubitContext,
+                        //                   ).showSnackBar(
+                        //                     const SnackBar(
+                        //                       content: Text('تم الحذف بنجاح!'),
+                        //                       backgroundColor: Colors.green,
+                        //                     ),
+                        //                   );
+                        //                 })
+                        //                 .catchError((error) {
+                        //                   ScaffoldMessenger.of(
+                        //                     cubitContext,
+                        //                   ).showSnackBar(
+                        //                     SnackBar(
+                        //                       content: Text(
+                        //                         'فشل الحذف: $error',
+                        //                       ),
+                        //                       backgroundColor: Colors.red,
+                        //                     ),
+                        //                   );
+                        //                 });
+                        //           },
+                        //           style: ElevatedButton.styleFrom(
+                        //             backgroundColor: Colors.red,
+                        //           ),
+                        //           child: const Text('حذف'),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   );
+                        // },
                       );
                     },
                   );
@@ -218,6 +238,95 @@ class _GovernoratesPageState extends State<GovernoratesPage> {
           );
         },
       ),
+    );
+  }
+
+  StatefulBuilder deletWidget(
+    GovernorateModel governorate,
+    bool isDeleting,
+    BuildContext cubitContext,
+  ) {
+    return StatefulBuilder(
+      builder: (innerDialogContext, setDialogState) {
+        return AlertDialog(
+          title: const Text('تأكيد الحذف'),
+          content: Text(
+            'هل أنت متأكد أنك تريد حذف محافظة ${governorate.name}؟',
+          ),
+          actions: [
+            // زر الإلغاء
+            TextButton(
+              onPressed: isDeleting
+                  ? null
+                  : () {
+                      Navigator.pop(innerDialogContext);
+                    },
+              child: const Text('إلغاء'),
+            ),
+
+            // زر الحذف
+            ElevatedButton(
+              onPressed: isDeleting
+                  ? null // تعطيل الزر أثناء التحميل
+                  : () async {
+                      // 3. بدء التحميل وتحديث حالة الـ Dialog
+                      setDialogState(() => isDeleting = true);
+
+                      try {
+                        // استدعاء دالة الحذف (نحن نفترض أن GovernoratesListCubit موجود في cubitContext)
+                        await cubitContext
+                            .read<GovernoratesListCubit>()
+                            .deleteGovernorate(governorate.id);
+
+                        // 4. إغلاق الدايلوج عند النجاح، نتحقق من mounted
+                        if (innerDialogContext.mounted) {
+                          Navigator.pop(innerDialogContext);
+                        }
+
+                        // 5. تحديث قائمة المحافظات (باستخدام السياق الخارجي الآمن)
+                        // بما أن cubitContext تم الحصول عليه قبل الدخول لـ async، فإن استخدامه للحصول على Cubit آمن.
+                        cubitContext
+                            .read<GovernoratesListCubit>()
+                            .fetchGovernorates();
+
+                        // 6. عرض رسالة النجاح (باستخدام السياق الخارجي الآمن)
+                        ScaffoldMessenger.of(cubitContext).showSnackBar(
+                          const SnackBar(
+                            content: Text('تم الحذف بنجاح!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } catch (error) {
+                        // 4. إغلاق الدايلوج عند الخطأ، نتحقق من mounted
+                        if (innerDialogContext.mounted) {
+                          Navigator.pop(innerDialogContext);
+                        }
+
+                        // 6. عرض رسالة الخطأ (باستخدام السياق الخارجي الآمن)
+                        ScaffoldMessenger.of(cubitContext).showSnackBar(
+                          SnackBar(
+                            content: Text('فشل الحذف: ${error.toString()}'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              // عرض مؤشر التحميل أو النص
+              child: isDeleting
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : const Text('حذف'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
