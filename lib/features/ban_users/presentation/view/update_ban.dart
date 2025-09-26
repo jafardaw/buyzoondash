@@ -3,6 +3,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
+import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/ban_users/data/model/ban_user_model.dart';
 
@@ -79,93 +80,96 @@ class _UpdateBanFormState extends State<UpdateBanForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _reasonController,
-              decoration: const InputDecoration(
+    return Center(
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: _reasonController,
+
                 labelText: 'سبب الحظر',
-                border: OutlineInputBorder(),
+                hintText: 'سبب الحظر',
+
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال سبب الحظر';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'الرجاء إدخال سبب الحظر';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _daysController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: _daysController,
+                keyboardType: TextInputType.number,
+
                 labelText: 'مدة الحظر بالأيام',
-                border: OutlineInputBorder(),
+                hintText: 'مدة الحظر بالأيام',
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      int.tryParse(value) == null) {
+                    return 'الرجاء إدخال عدد صحيح للأيام';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    int.tryParse(value) == null) {
-                  return 'الرجاء إدخال عدد صحيح للأيام';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 30),
-            BlocConsumer<BanCubit, BanState>(
-              listener: (context, state) {
-                if (state is BanSuccess) {
-                  showCustomSnackBar(
-                    context,
-                    state.response.message,
-                    color: Palette.success,
+              const SizedBox(height: 30),
+              BlocConsumer<BanCubit, BanState>(
+                listener: (context, state) {
+                  if (state is BanSuccess) {
+                    showCustomSnackBar(
+                      context,
+                      state.response.message,
+                      color: Palette.success,
+                    );
+                    Navigator.of(context).pop(true);
+                  } else if (state is BanFailure) {
+                    showCustomSnackBar(
+                      context,
+                      state.error,
+                      color: Palette.error,
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is BanLoading) {
+                    return const LoadingViewWidget();
+                  }
+                  return Column(
+                    children: [
+                      CustomButton(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<BanCubit>().updateBan(
+                              userId: widget.userId,
+                              reason: _reasonController.text,
+                              days: int.parse(_daysController.text),
+                            );
+                          }
+                        },
+                        text: 'تعديل معلومات الحظر',
+                        // لون مختلف لزر التعديل
+                      ),
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<BanCubit>().unBan(
+                              userId: widget.userId,
+                            );
+                          }
+                        },
+                        text: ' فك الحظر',
+                      ),
+                    ],
                   );
-                  Navigator.of(context).pop(true);
-                } else if (state is BanFailure) {
-                  showCustomSnackBar(
-                    context,
-                    state.error,
-                    color: Palette.error,
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state is BanLoading) {
-                  return const LoadingViewWidget();
-                }
-                return Column(
-                  children: [
-                    CustomButton(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<BanCubit>().updateBan(
-                            userId: widget.userId,
-                            reason: _reasonController.text,
-                            days: int.parse(_daysController.text),
-                          );
-                        }
-                      },
-                      text: 'تعديل معلومات الحظر',
-                      // لون مختلف لزر التعديل
-                    ),
-                    const SizedBox(height: 10),
-                    CustomButton(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<BanCubit>().unBan(userId: widget.userId);
-                        }
-                      },
-                      text: ' فك الحظر',
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
