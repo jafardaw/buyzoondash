@@ -28,6 +28,8 @@ class _AddNewProductState extends State<AddNewProduct> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController refundRateController = TextEditingController();
+  final TextEditingController profitratioController = TextEditingController();
+
   final TextEditingController productTypeIdController =
       TextEditingController(); // Added back
 
@@ -73,6 +75,7 @@ class _AddNewProductState extends State<AddNewProduct> {
           rating: _rating,
           productTypeId: widget.id,
           refundRate: double.parse(refundRateController.text),
+          profitratio: double.parse(profitratioController.text),
           imagesBytes: _selectedImagesBytes,
         );
       }
@@ -179,13 +182,27 @@ class _AddNewProductState extends State<AddNewProduct> {
                     },
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 30),
 
-                const SizedBox(height: 24),
+                // const SizedBox(height: 24),
                 CustomTextField(
                   label: const Text('نسبة الاسترجاع'),
                   hintText: 'مثال: 15.0',
                   controller: refundRateController,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال نسبة الاسترجاع';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                CustomTextField(
+                  label: const Text('نسبة الربح'),
+                  hintText: 'مثال: 15.0',
+                  controller: profitratioController,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {

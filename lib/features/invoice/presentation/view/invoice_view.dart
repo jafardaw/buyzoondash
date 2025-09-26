@@ -29,7 +29,7 @@ class InvoiceView extends StatelessWidget {
         backgroundColor: Palette.backgroundColor,
         appBar: AppareWidget(
           title: 'الفاتورة',
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
         ),
 
         body: BlocBuilder<InvoiceCubit, InvoiceState>(

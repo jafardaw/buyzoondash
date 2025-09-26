@@ -11,8 +11,8 @@ class ProductSearchCubit extends Cubit<ProductSearchState> {
   Future<void> searchRawMaterials({
     required int idype,
     String? name,
-    String? description,
-    String? status,
+    // String? description,
+    // String? status,
     double? minPrice,
     double? maxPrice,
     double? minrating,
@@ -23,8 +23,8 @@ class ProductSearchCubit extends Cubit<ProductSearchState> {
       final results = await repository.searchRawMaterials(
         idype: idype,
         name: name,
-        description: description,
-        status: status,
+        // description: description,
+        // status: status,
         minPrice: minPrice,
         maxPrice: maxPrice,
         minrating: minrating,

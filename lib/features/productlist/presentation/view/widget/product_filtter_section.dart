@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class ProductFiltersSection extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
-  final TextEditingController descriptionController;
-  final String? status;
+  // final TextEditingController descriptionController;
+  // final String? status;
   final ValueChanged<String?> onStatusChanged;
   final TextEditingController minPriceController;
   final TextEditingController maxPriceController;
@@ -18,8 +18,8 @@ class ProductFiltersSection extends StatelessWidget {
     super.key,
     required this.formKey,
     required this.nameController,
-    required this.descriptionController,
-    required this.status,
+    // required this.descriptionController,
+    // required this.status,
     required this.onStatusChanged,
     required this.minPriceController,
     required this.maxPriceController,
@@ -49,6 +49,8 @@ class ProductFiltersSection extends StatelessWidget {
       children: [
         // === هنا التعديل المهم ===
         SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+
           // أضف SingleChildScrollView هنا
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -63,57 +65,57 @@ class ProductFiltersSection extends StatelessWidget {
                     prefixIcon: const Icon(Icons.label),
                   ),
                   const SizedBox(height: 12),
-                  CustomTextField(
-                    controller: descriptionController,
-                    label: const Text('الوصف'),
-                    prefixIcon: const Icon(Icons.description),
-                  ),
+                  // CustomTextField(
+                  //   controller: descriptionController,
+                  //   label: const Text('الوصف'),
+                  //   prefixIcon: const Icon(Icons.description),
+                  // ),
                   const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    focusColor: Colors.white,
-                    iconEnabledColor: Palette.primary,
-                    iconDisabledColor: Palette.primary,
-                    initialValue: status,
-                    decoration: InputDecoration(
-                      labelText: 'الحالة',
-                      prefixIcon: const Icon(
-                        Icons.start,
-                        color: Palette.primary,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                    items: [
-                      DropdownMenuItem(
-                        value: null,
-                        child: Text(
-                          'الكل',
-                          style: const TextStyle(color: Palette.primary),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'used',
-                        child: Text(
-                          'مستخدمة',
-                          style: const TextStyle(color: Palette.primary),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'unused',
-                        child: Text(
-                          'غير مستخدمة',
-                          style: const TextStyle(color: Palette.primary),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                    onChanged: onStatusChanged,
-                  ),
+                  // DropdownButtonFormField<String>(
+                  //   focusColor: Colors.white,
+                  //   iconEnabledColor: Palette.primary,
+                  //   iconDisabledColor: Palette.primary,
+                  //   initialValue: status,
+                  //   decoration: InputDecoration(
+                  //     labelText: 'الحالة',
+                  //     prefixIcon: const Icon(
+                  //       Icons.start,
+                  //       color: Palette.primary,
+                  //     ),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //     filled: true,
+                  //     fillColor: Colors.white,
+                  //   ),
+                  //   items: [
+                  //     DropdownMenuItem(
+                  //       value: null,
+                  //       child: Text(
+                  //         'الكل',
+                  //         style: const TextStyle(color: Palette.primary),
+                  //         overflow: TextOverflow.ellipsis,
+                  //       ),
+                  //     ),
+                  //     DropdownMenuItem(
+                  //       value: 'used',
+                  //       child: Text(
+                  //         'مستخدمة',
+                  //         style: const TextStyle(color: Palette.primary),
+                  //         overflow: TextOverflow.ellipsis,
+                  //       ),
+                  //     ),
+                  //     DropdownMenuItem(
+                  //       value: 'unused',
+                  //       child: Text(
+                  //         'غير مستخدمة',
+                  //         style: const TextStyle(color: Palette.primary),
+                  //         overflow: TextOverflow.ellipsis,
+                  //       ),
+                  //     ),
+                  //   ],
+                  //   onChanged: onStatusChanged,
+                  // ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -132,7 +134,7 @@ class ProductFiltersSection extends StatelessWidget {
                           },
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: CustomTextField(
                           controller: maxPriceController,
@@ -154,7 +156,7 @@ class ProductFiltersSection extends StatelessWidget {
                   CustomTextField(
                     controller: minStockAlertController,
                     keyboardType: TextInputType.number,
-                    label: const Text('الحد الأدنى للتنبيه'),
+                    label: const Text('اقل تقييم'),
                     prefixIcon: const Icon(Icons.notifications_active),
                     validator: (value) {
                       if (value!.isNotEmpty && double.tryParse(value) == null) {

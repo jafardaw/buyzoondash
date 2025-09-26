@@ -160,7 +160,7 @@ class _CardProductState extends State<CardProduct> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${widget.product.price.toStringAsFixed(2)} \$',
+                  widget.product.price.toStringAsFixed(2),
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.green,
@@ -176,6 +176,14 @@ class _CardProductState extends State<CardProduct> {
                   direction: Axis.horizontal,
                 ),
               ],
+            ),
+            Text(
+              widget.product.price.toStringAsFixed(2),
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
 

@@ -265,7 +265,10 @@ class _ProductTypeGridItemState extends State<ProductTypeGridItem> {
                         AddProductCubit(AddProductRepository(ApiService())),
                   ),
                 ],
-                child: ProductSearchPage(idtype: widget.productType.id),
+                child: ProductSearchPage(
+                  idtype: widget.productType.id,
+                  name: widget.productType.name,
+                ),
               ),
             ),
           );

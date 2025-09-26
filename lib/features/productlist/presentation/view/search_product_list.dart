@@ -15,10 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductSearchPage extends StatefulWidget {
-  const ProductSearchPage({super.key, required this.idtype});
+  const ProductSearchPage({
+    super.key,
+    required this.idtype,
+    required this.name,
+  });
 
   final int idtype;
-
+  final String name;
   @override
   State<ProductSearchPage> createState() => _ProductSearchPageState();
 }
@@ -28,7 +32,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String? _status;
+  // String? _status;
   final _minPriceController = TextEditingController();
   final _maxPriceController = TextEditingController();
   final _minStockAlertController = TextEditingController();
@@ -49,10 +53,10 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
       context.read<ProductSearchCubit>().searchRawMaterials(
         idype: widget.idtype,
         name: _nameController.text.isNotEmpty ? _nameController.text : null,
-        description: _descriptionController.text.isNotEmpty
-            ? _descriptionController.text
-            : null,
-        status: _status,
+        // description: _descriptionController.text.isNotEmpty
+        //     ? _descriptionController.text
+        //     : null,
+        // status: _status,
         minPrice: _minPriceController.text.isNotEmpty
             ? double.parse(_minPriceController.text)
             : null,
@@ -87,7 +91,7 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
 
   void _clearFilters() {
     _formKey.currentState!.reset();
-    _status = null;
+    // _status = null;
 
     _nameController.clear();
     _descriptionController.clear();
@@ -111,7 +115,10 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppareWidget(automaticallyImplyLeading: true, title: 'المنتجات'),
+      appBar: AppareWidget(
+        automaticallyImplyLeading: true,
+        title: 'المنتجات الخاصة ب${widget.name}',
+      ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -119,11 +126,11 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
               child: ProductFiltersSection(
                 formKey: _formKey,
                 nameController: _nameController,
-                descriptionController: _descriptionController,
-                status: _status,
+                // descriptionController: _descriptionController,
+                // status: _status,
                 onStatusChanged: (newValue) {
                   setState(() {
-                    _status = newValue;
+                    // _status = newValue;
                   });
                 },
                 minPriceController: _minPriceController,

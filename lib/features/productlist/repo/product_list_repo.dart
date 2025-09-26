@@ -38,6 +38,8 @@ class AddProductRepository {
     required double rating,
     required int productTypeId,
     required double refundRate,
+
+    required double profitratio,
     required List<Uint8List> imagesBytes,
   }) async {
     try {
@@ -55,6 +57,7 @@ class AddProductRepository {
         'rating': rating,
         'product_type_id': productTypeId,
         'refund_rate': refundRate,
+        'profit_ratio': profitratio,
         'photos[]': imageFiles,
       });
 
@@ -127,8 +130,8 @@ class AddProductRepository {
   Future<List<ProductModel>> searchRawMaterials({
     required int idype,
     String? name,
-    String? description,
-    String? status,
+    // String? description,
+    // String? status,
     double? minPrice,
     double? maxPrice,
     double? minrating,
@@ -136,10 +139,10 @@ class AddProductRepository {
     final queryParameters = <String, dynamic>{};
 
     if (name != null && name.isNotEmpty) queryParameters['search'] = name;
-    if (description != null && description.isNotEmpty) {
-      queryParameters['description'] = description;
-    }
-    if (status != null && status.isNotEmpty) queryParameters['status'] = status;
+    // if (description != null && description.isNotEmpty) {
+    //   queryParameters['description'] = description;
+    // }
+    // if (status != null && status.isNotEmpty) queryParameters['status'] = status;
     if (minPrice != null) queryParameters['min_price'] = minPrice;
     if (maxPrice != null) queryParameters['max_price'] = maxPrice;
     if (minrating != null) {

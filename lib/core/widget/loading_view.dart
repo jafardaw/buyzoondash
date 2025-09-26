@@ -89,43 +89,45 @@ class __ImageShakeLoadingState extends State<_ImageShakeLoading>
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(
-                  0,
-                  sin(_controller.value * 2 * pi) * 10, // حركة اهتزازية
-                ),
-                child: Transform.rotate(
-                  angle: _shakeAnimation.value,
-                  child: Opacity(
-                    opacity: _opacityAnimation.value,
-                    child: Center(
-                      child: widget.imagePath != null
-                          ? Image.asset(
-                              widget.imagePath!,
-                              width: widget.size * 0.7,
-                              height: widget.size * 0.7,
-                              fit: BoxFit.contain,
-                            )
-                          : Icon(
-                              Icons.shopping_cart,
-                              size: widget.size * 0.5,
-                              color: widget.color,
-                            ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(
+                    0,
+                    sin(_controller.value * 2 * pi) * 10, // حركة اهتزازية
+                  ),
+                  child: Transform.rotate(
+                    angle: _shakeAnimation.value,
+                    child: Opacity(
+                      opacity: _opacityAnimation.value,
+                      child: Center(
+                        child: widget.imagePath != null
+                            ? Image.asset(
+                                widget.imagePath!,
+                                width: widget.size * 0.7,
+                                height: widget.size * 0.7,
+                                fit: BoxFit.contain,
+                              )
+                            : Icon(
+                                Icons.shopping_cart,
+                                size: widget.size * 0.5,
+                                color: widget.color,
+                              ),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
+                );
+              },
+            ),
 
-          // _PulseDotsLoading(color: widget.color.withOpacity(0.5), size: 30),
-        ],
+            // _PulseDotsLoading(color: widget.color.withOpacity(0.5), size: 30),
+          ],
+        ),
       ),
     );
   }

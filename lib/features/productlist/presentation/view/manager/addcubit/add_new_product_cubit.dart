@@ -16,6 +16,8 @@ class AddProductCubit extends Cubit<AddProductState> {
     required double rating,
     required int productTypeId,
     required double refundRate,
+    required double profitratio,
+
     required List<Uint8List> imagesBytes,
   }) async {
     emit(AddProductLoading());
@@ -27,6 +29,7 @@ class AddProductCubit extends Cubit<AddProductState> {
         rating: rating,
         productTypeId: productTypeId,
         refundRate: refundRate,
+        profitratio: profitratio,
         imagesBytes: imagesBytes,
       );
       emit(AddProductSuccess());
