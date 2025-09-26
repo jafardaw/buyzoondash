@@ -5,6 +5,7 @@ import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
+import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_governorate_cubit.dart.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_governorate_state.dart';
@@ -55,81 +56,87 @@ class _AddGovernorateFormState extends State<AddGovernorateForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
+    return Center(
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Image.asset(
+                height: 246,
+                width: 246,
+                'assest/images/SAVE_٢٠٢٥٠٨٢٩_٢٣٣٣٥١-removebg-preview.png',
+              ),
+              CustomTextField(
+                controller: _nameController,
+
                 labelText: 'اسم المحافظة',
-                border: OutlineInputBorder(),
+                hintText: 'اسم المحافظة',
+
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال اسم المحافظة';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'الرجاء إدخال اسم المحافظة';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _priceController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              const SizedBox(height: 20),
+              CustomTextField(
+                controller: _priceController,
+                keyboardType: TextInputType.number,
                 labelText: 'سعر التوصيل',
-                border: OutlineInputBorder(),
+                label: Text('سعر التوصيل'),
+                hintText: 'سعر التوصيل',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء إدخال سعر التوصيل';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'الرجاء إدخال رقم صحيح';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'الرجاء إدخال سعر التوصيل';
-                }
-                if (double.tryParse(value) == null) {
-                  return 'الرجاء إدخال رقم صحيح';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 30),
-            BlocConsumer<AddGovernorateCubit, AddGovernorateState>(
-              listener: (context, state) {
-                if (state is AddGovernorateSuccess) {
-                  // إغلاق الصفحة الحالية (pop) وإرسال قيمة true
-                  // هذه القيمة تُستخدم لإخبار الصفحة السابقة بضرورة التحديث
-                  Navigator.of(context).pop(true);
-                  // عرض رسالة النجاح
-                  showCustomSnackBar(
-                    context,
-                    state.message,
-                    color: Palette.success,
+              const SizedBox(height: 30),
+              BlocConsumer<AddGovernorateCubit, AddGovernorateState>(
+                listener: (context, state) {
+                  if (state is AddGovernorateSuccess) {
+                    // إغلاق الصفحة الحالية (pop) وإرسال قيمة true
+                    // هذه القيمة تُستخدم لإخبار الصفحة السابقة بضرورة التحديث
+                    Navigator.of(context).pop(true);
+                    // عرض رسالة النجاح
+                    showCustomSnackBar(
+                      context,
+                      state.message,
+                      color: Palette.success,
+                    );
+                  } else if (state is AddGovernorateFailure) {
+                    showCustomSnackBar(
+                      context,
+                      state.error,
+                      color: Palette.error,
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AddGovernorateLoading) {
+                    return Center(child: const LoadingViewWidget());
+                  }
+                  return CustomButton(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AddGovernorateCubit>().addGovernorate(
+                          name: _nameController.text,
+                          price: double.parse(_priceController.text),
+                        );
+                      }
+                    },
+                    text: 'إضافة المحافظة',
                   );
-                } else if (state is AddGovernorateFailure) {
-                  showCustomSnackBar(
-                    context,
-                    state.error,
-                    color: Palette.error,
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state is AddGovernorateLoading) {
-                  return Center(child: const LoadingViewWidget());
-                }
-                return CustomButton(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<AddGovernorateCubit>().addGovernorate(
-                        name: _nameController.text,
-                        price: double.parse(_priceController.text),
-                      );
-                    }
-                  },
-                  text: 'إضافة المحافظة',
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

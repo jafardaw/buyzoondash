@@ -146,31 +146,90 @@ class _RegionsPageState extends State<RegionsPage> {
                           _fetchCity();
                         }
                       },
+
+                      // داخل دالة onDeletePressed:
                       onDeletePressed: () {
                         showDialog(
                           context: context,
-                          builder: (dialogContext) => AlertDialog(
-                            title: const Text('تأكيد الحذف'),
-                            content: Text(
-                              'هل أنت متأكد من حذف منطقة ${region.name}؟',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(dialogContext),
-                                child: const Text('إلغاء'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(dialogContext);
-                                  _deleteRegion(region.id);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                                child: const Text('حذف'),
-                              ),
-                            ],
-                          ),
+                          // ⚠️ استخدام StatefulBuilder هنا لتحديث حالة الزر محلياً
+                          builder: (dialogContext) {
+                            // 1. تعريف المتغير isDeleting هنا ليبقى محتفظاً بقيمته (Closure Variable)
+                            var isDeleting = false;
+
+                            return StatefulBuilder(
+                              builder: (innerDialogContext, setDialogState) {
+                                return AlertDialog(
+                                  title: const Text('تأكيد الحذف'),
+                                  content: Text(
+                                    'هل أنت متأكد من حذف منطقة ${region.name}؟', // افترض أن 'region' مُعرّف
+                                  ),
+                                  actions: [
+                                    // زر الإلغاء
+                                    TextButton(
+                                      onPressed: isDeleting
+                                          ? null // تعطيل الزر أثناء التحميل
+                                          : () => Navigator.pop(
+                                              innerDialogContext,
+                                            ),
+                                      child: const Text('إلغاء'),
+                                    ),
+
+                                    // زر الحذف
+                                    ElevatedButton(
+                                      onPressed: isDeleting
+                                          ? null // تعطيل الزر أثناء التحميل
+                                          : () async {
+                                              // 2. بدء التحميل وتحديث حالة الـ Dialog
+                                              setDialogState(
+                                                () => isDeleting = true,
+                                              );
+
+                                              try {
+                                                // 3. استدعاء دالة الحذف الخارجية
+                                                // ⚠️ يجب تعديل دالة _deleteRegion لتكون Async وتنفذ عملية الحذف
+                                                await _deleteRegion(region.id);
+
+                                                // 4. إغلاق الدايلوج عند النجاح
+                                                Navigator.pop(
+                                                  // ignore: use_build_context_synchronously
+                                                  innerDialogContext,
+                                                );
+                                              } catch (error) {
+                                                // 4. إغلاق الدايلوج عند الخطأ
+                                                if (innerDialogContext
+                                                    .mounted) {
+                                                  Navigator.pop(
+                                                    innerDialogContext,
+                                                  );
+                                                }
+                                                showCustomSnackBar(
+                                                  context,
+                                                  error.toString(),
+                                                );
+                                              }
+                                            },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      child: isDeleting
+                                          ? const SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(Colors.white),
+                                              ),
+                                            )
+                                          : const Text('حذف'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                         );
                       },
                     );

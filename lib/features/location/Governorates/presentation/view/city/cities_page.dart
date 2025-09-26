@@ -138,31 +138,86 @@ class _CitiesPageState extends State<CitiesPage> {
                       _fetchGovernorate();
                     }
                   },
+                  // داخل دالة onDeletePressed:
                   onDeletePressed: () async {
-                    final result = showDialog(
+                    // ⚠️ لا تحتاج لـ 'final result =' بما أنك لا تستخدم القيمة المرجعة بشكل فوري
+                    showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('تأكيد الحذف'),
-                        content: Text(
-                          'هل أنت متأكد أنك تريد حذف مدينة ${city.name}؟',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('إلغاء'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              _deleteCity(city);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                            ),
-                            child: const Text('حذف'),
-                          ),
-                        ],
-                      ),
+                      // 1. استخدام الدالة البانية العادية لاستيعاب المتغير isDeleting
+                      builder: (dialogContext) {
+                        // 2. تعريف المتغير isDeleting هنا ليبقى محتفظاً بقيمته (Closure Variable)
+                        var isDeleting = false;
+
+                        return StatefulBuilder(
+                          builder: (innerDialogContext, setDialogState) {
+                            return AlertDialog(
+                              title: const Text('تأكيد الحذف'),
+                              content: Text(
+                                'هل أنت متأكد أنك تريد حذف مدينة ${city.name}؟', // افترض أن 'city' مُعرّف
+                              ),
+                              actions: [
+                                // زر الإلغاء
+                                TextButton(
+                                  onPressed: isDeleting
+                                      ? null // تعطيل الزر أثناء التحميل
+                                      : () => Navigator.pop(innerDialogContext),
+                                  child: const Text('إلغاء'),
+                                ),
+
+                                // زر الحذف
+                                ElevatedButton(
+                                  onPressed: isDeleting
+                                      ? null // تعطيل الزر أثناء التحميل
+                                      : () async {
+                                          // 3. بدء التحميل وتحديث حالة الـ Dialog
+                                          setDialogState(
+                                            () => isDeleting = true,
+                                          );
+
+                                          try {
+                                            // 4. استدعاء دالة الحذف الخارجية
+                                            // نفترض أن _deleteCity تقوم بعملية الحذف وعرض SnackBar وتحديث القائمة
+                                            await _deleteCity(city);
+
+                                            // 5. إغلاق الدايلوج عند النجاح
+                                            if (innerDialogContext.mounted) {
+                                              Navigator.pop(innerDialogContext);
+                                            }
+                                          } catch (error) {
+                                            // 5. إغلاق الدايلوج عند الخطأ
+                                            if (innerDialogContext.mounted) {
+                                              Navigator.pop(innerDialogContext);
+                                            }
+
+                                            // ⚠️ إذا كانت _deleteCity لا تعرض رسالة خطأ، يمكنك عرضها هنا:
+                                            /* ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('فشل الحذف: ${error.toString()}'), backgroundColor: Colors.red),
+                          ); 
+                          */
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: isDeleting
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
+                                        )
+                                      : const Text('حذف'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                   // onAddPressed: () async {
