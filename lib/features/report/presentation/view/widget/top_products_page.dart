@@ -58,7 +58,7 @@ class _TopProductsPageState extends State<TopProductsPage> {
                             children: [
                               const Text('إجمالي المبيعات'),
                               Text(
-                                '${product.totalSales.toStringAsFixed(2)} \$',
+                                product.totalSales.toStringAsFixed(2),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
@@ -95,8 +95,8 @@ class _TopProductsPageState extends State<TopProductsPage> {
         color: color,
         value: product.totalSales,
         title: isTouched
-            ? '${product.product.name}\n(${product.totalSales.toStringAsFixed(1)} \$)'
-            : '${product.totalSales.toStringAsFixed(1)} \$',
+            ? '${product.product.name}\n(${product.totalSales.toStringAsFixed(1)})'
+            : product.totalSales.toStringAsFixed(1),
         radius: radius,
         titleStyle: TextStyle(
           fontSize: fontSize,

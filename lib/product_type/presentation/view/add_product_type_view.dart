@@ -1,13 +1,10 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
-import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
 import 'package:buyzoonapp/core/widget/custom_button.dart';
 import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
-import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
-import 'package:buyzoonapp/product_type/repo/product_type_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,24 +27,6 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
         automaticallyImplyLeading: false,
       ),
 
-      // appBar: AppBar(
-      //   title: const Text(
-      //     'إضافة منتج',
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //       fontWeight: FontWeight.bold,
-      //       fontSize: 22,
-      //     ),
-      //   ),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.deepPurple,
-      //   elevation: 0,
-      //   iconTheme: const IconThemeData(color: Colors.white),
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.arrow_back_ios_new_rounded),
-      //     onPressed: () => Navigator.of(context).pop(),
-      //   ),
-      // ),
       body: BlocListener<AddProductTypeCubit, AddProductTypeState>(
         listener: (context, state) {
           if (state is AddProductTypeLoading) {
@@ -62,9 +41,10 @@ class _AddProductTypeScreenState extends State<AddProductTypeScreen> {
               'تمت الإضافة بنجاح!',
               color: Palette.success,
             );
+
             // هذا السطر لن يسبب خطأ بعد الآن
-            context.read<GetProductTypeCubit>().getProductTypes();
-            Navigator.pop(context);
+            // context.read<GetProductTypeCubit>().getProductTypes();
+            Navigator.pop(context, true);
             _nameController.clear();
           } else if (state is AddProductTypeFailure) {
             showCustomSnackBar(

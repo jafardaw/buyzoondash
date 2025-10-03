@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_region_cubit.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/add_region_state.dart';
@@ -39,9 +40,9 @@ class _AddRegionDialogState extends State<AddRegionDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextFormField(
+              CustomTextField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'اسم المنطقة'),
+                label: Text('اسم المنطقة'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'الرجاء إدخال اسم';
@@ -49,10 +50,11 @@ class _AddRegionDialogState extends State<AddRegionDialog> {
                   return null;
                 },
               ),
-              TextFormField(
+              SizedBox(height: 8),
+              CustomTextField(
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'سعر التوصيل'),
+                label: Text('سعر التوصيل'),
                 validator: (value) {
                   if (value == null ||
                       value.isEmpty ||

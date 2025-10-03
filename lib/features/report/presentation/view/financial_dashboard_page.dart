@@ -189,13 +189,13 @@ class FinancialDashboardPage extends StatelessWidget {
         _buildKpiCard(
           context,
           'الإيرادات',
-          '${report.totalRevenue.toStringAsFixed(3)} \$',
+          '${report.totalRevenue.toStringAsFixed(3)} ',
           Colors.green,
         ),
         _buildKpiCard(
           context,
           'الأرباح',
-          '${report.totalProfit.toStringAsFixed(3)} \$',
+          '${report.totalProfit.toStringAsFixed(3)} ',
           Colors.blue,
         ),
         _buildKpiCard(

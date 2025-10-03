@@ -240,7 +240,7 @@ class OrderItemCard extends StatelessWidget {
               children: [
                 Text('الكمية: ${item.quantity ?? 0}'),
                 Text(
-                  'السعر: ${item.product?.price?.toStringAsFixed(2) ?? '0.00'} \$',
+                  'السعر: ${item.product?.price?.toStringAsFixed(2) ?? '0.00'} ',
                 ),
                 Text(
                   'الوصف: ${item.product?.description ?? 'لا يوجد وصف'}',

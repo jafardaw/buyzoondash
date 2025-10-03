@@ -9,6 +9,7 @@ class BanModel {
   final String endAt;
   final String createdAt;
   final String updatedAt;
+  final int days;
 
   BanModel({
     required this.id,
@@ -19,6 +20,7 @@ class BanModel {
     required this.endAt,
     required this.createdAt,
     required this.updatedAt,
+    required this.days,
   });
 
   factory BanModel.fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ class BanModel {
       endAt: json['end_at'] as String,
       createdAt: json['created_at'] as String,
       updatedAt: json['updated_at'] as String,
+      days: json['days'] as int,
     );
   }
 }

@@ -37,7 +37,7 @@ class TopUsersPage extends StatelessWidget {
                       children: [
                         Text('إجمالي الإنفاق'),
                         Text(
-                          '${user.totalSpent.toStringAsFixed(2)} \$',
+                          user.totalSpent.toStringAsFixed(2),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.green,

@@ -3,6 +3,7 @@
 import 'package:buyzoonapp/core/func/show_snak_bar.dart';
 import 'package:buyzoonapp/core/style/color.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
+import 'package:buyzoonapp/core/widget/custom_field.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/location/Governorates/data/model/city_model.dart';
 import 'package:buyzoonapp/features/location/Governorates/presentation/manger/update_city_cubit.dart';
@@ -50,9 +51,10 @@ class _UpdateCityDialogState extends State<UpdateCityDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextFormField(
+              CustomTextField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'اسم المدينة'),
+                label: Text('اسم المدينة'),
+
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'الرجاء إدخال اسم';
@@ -60,10 +62,10 @@ class _UpdateCityDialogState extends State<UpdateCityDialog> {
                   return null;
                 },
               ),
-              TextFormField(
+              CustomTextField(
                 controller: _priceController,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'سعر التوصيل'),
+                label: Text('سعر التوصيل'),
                 validator: (value) {
                   if (value == null ||
                       value.isEmpty ||

@@ -131,7 +131,7 @@ class _UpdateProductTypeScreenState extends State<UpdateProductTypView> {
                                   );
                             }
                           },
-                          text: 'إضافة',
+                          text: 'تعديل',
                         );
                       },
                     ),

@@ -51,7 +51,7 @@ class RefundedOrdersPage extends StatelessWidget {
                               style: const TextStyle(color: Colors.red),
                             ),
                             Text(
-                              'الإجمالي: ${order.totalPrice.toStringAsFixed(2)} \$',
+                              'الإجمالي: ${order.totalPrice.toStringAsFixed(2)}',
                             ),
                           ],
                         ),

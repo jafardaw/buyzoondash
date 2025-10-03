@@ -151,7 +151,7 @@ class _ShippingViewState extends State<ShippingView> {
                   icon: Icons.price_change,
                   label: 'السعر الإجمالي للطلب',
                   value: shipping.order?.totalPrice != null
-                      ? '${shipping.order!.totalPrice!.toStringAsFixed(2)} \$'
+                      ? shipping.order!.totalPrice!.toStringAsFixed(2)
                       : 'غير متوفر',
                 ),
                 const SizedBox(height: 10),

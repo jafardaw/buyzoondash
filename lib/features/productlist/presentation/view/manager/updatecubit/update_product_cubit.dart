@@ -18,6 +18,8 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
     required double price,
     required double rating,
     required double refundRate,
+    required double profitratio,
+    required bool ban,
     List<int>? photosToDelete,
     List<Uint8List>? newPhotos,
   }) async {
@@ -30,8 +32,10 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
         price: price,
         rating: rating,
         refundRate: refundRate,
+        ban: ban,
         photosToDelete: photosToDelete,
         newPhotos: newPhotos,
+        profitratio: profitratio,
       );
       emit(UpdateProductSuccess());
     } catch (error) {

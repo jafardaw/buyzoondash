@@ -108,11 +108,10 @@ class BannedUsersBodyView extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    UpdateBan(userId: user.id, userBanModel: user),
+                    UpdateBan(userId: user.activeBan!.id, userBanModel: user),
               ),
             );
 
-            // عند العودة من الصفحة، إذا كانت النتيجة true، نحدث القائمة
             if (result == true) {
               if (context.mounted) {
                 context.read<BannedUsersCubit>().getBannedUsers();

@@ -1,6 +1,7 @@
 import 'package:buyzoonapp/core/func/float_action_button.dart';
 import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/widget/appar_widget,.dart';
+import 'package:buyzoonapp/core/widget/error_widget_view.dart';
 import 'package:buyzoonapp/core/widget/loading_view.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/add_new_product.dart';
 import 'package:buyzoonapp/features/productlist/presentation/view/manager/addcubit/add_new_product_cubit.dart';
@@ -195,31 +196,40 @@ class ProductResultsSection extends StatelessWidget {
             size: 200, // حجم الصورة
           );
         } else if (state is RawMaterialSearchError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                const SizedBox(height: 16),
-                Text(
-                  state.message,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: () {
-                    // يمكنك استدعاء دالة البحث هنا مرة أخرى
-                    // بما أن الـ cubit موجود في الشجرة، يمكننا الوصول إليه
-                    context.read<ProductSearchCubit>().searchRawMaterials(
-                      idype: idype,
-                    );
-                  },
-                  child: const Text('إعادة المحاولة'),
-                ),
-              ],
-            ),
+          return ShowErrorWidgetView.fullScreenError(
+            errorMessage: state.message,
+            onRetry: () {
+              context.read<ProductSearchCubit>().searchRawMaterials(
+                idype: idype,
+              );
+            },
           );
+
+          // Center(
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       const Icon(Icons.error_outline, size: 48, color: Colors.red),
+          //       const SizedBox(height: 16),
+          //       Text(
+          //         state.message,
+          //         style: Theme.of(context).textTheme.titleMedium,
+          //         textAlign: TextAlign.center,
+          //       ),
+          //       const SizedBox(height: 16),
+          //       FilledButton(
+          //         onPressed: () {
+          //           // يمكنك استدعاء دالة البحث هنا مرة أخرى
+          //           // بما أن الـ cubit موجود في الشجرة، يمكننا الوصول إليه
+          //           context.read<ProductSearchCubit>().searchRawMaterials(
+          //             idype: idype,
+          //           );
+          //         },
+          //         child: const Text('إعادة المحاولة'),
+          //       ),
+          //     ],
+          //   ),
+          // );
         } else if (state is RawMaterialSearchSuccess) {
           if (state.results.isEmpty) {
             return Center(

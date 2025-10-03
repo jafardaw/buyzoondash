@@ -129,7 +129,7 @@ class _UpdateOrderViewBodyState extends State<UpdateOrderViewBody> {
                     }
                     return CustomButton(
                       onTap: () {
-                        _updateOrder;
+                        _updateOrder();
                       },
                       text: 'تعديل الطلب',
                     );

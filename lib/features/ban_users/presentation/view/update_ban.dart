@@ -74,7 +74,7 @@ class _UpdateBanFormState extends State<UpdateBanForm> {
       text: widget.userBanModel.activeBan!.reason,
     );
     _daysController = TextEditingController(
-      text: widget.userBanModel.activeBan!.bannedBy.toString(),
+      text: widget.userBanModel.activeBan!.days.toString(),
     );
   }
 

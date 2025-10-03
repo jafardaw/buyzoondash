@@ -2,6 +2,7 @@ import 'package:buyzoonapp/core/util/api_service.dart';
 import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/features/Order/presentation/view/manager/get_ordercubit/get_order_cubit.dart';
 import 'package:buyzoonapp/features/Order/repo/order_repo.dart';
+import 'package:buyzoonapp/features/splash/presentation/view/splash_screen.dart';
 
 import 'package:buyzoonapp/firebase_options.dart';
 import 'package:buyzoonapp/notifaction_local.dart';
@@ -19,9 +20,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await initializeLocalNotifications();
+  await initializeLocalNotifications();
 
-  // await setupNotifications();
+  await setupNotifications();
   runApp(const MyApp());
 }
 
@@ -73,7 +74,7 @@ class MyApp extends StatelessWidget {
       ],
       child: SafeArea(
         top: false,
-        child: MaterialApp.router(
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Splash Screen Demo',
           theme: ThemeData(primarySwatch: Colors.blue),
@@ -87,7 +88,7 @@ class MyApp extends StatelessWidget {
             Locale('en'), // دعم اللغة الإنجليزية
           ],
           locale: const Locale('ar'),
-          routerConfig: AppRoutes.router,
+          home: SplashScreen(),
         ),
       ),
     );

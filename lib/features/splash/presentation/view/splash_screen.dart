@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:buyzoonapp/core/style/color.dart';
-import 'package:buyzoonapp/core/util/app_router.dart';
 import 'package:buyzoonapp/features/auth/presentation/view/login_view.dart';
 import 'package:buyzoonapp/features/root/presentation/view/root_view.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +30,12 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = prefs.getString('token');
 
       if (token == null || token.isEmpty) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } else {
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) =>
                 RootView(), // Replace with your main screen widget

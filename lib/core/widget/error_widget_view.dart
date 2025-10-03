@@ -21,35 +21,37 @@ class ShowErrorWidgetView extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (showImage) ...[
-              Icon(Icons.error_outline, size: 64, color: Palette.error),
-              const SizedBox(height: 20),
-            ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (showImage) ...[
+                Icon(Icons.error_outline, size: 64, color: Palette.error),
+                const SizedBox(height: 20),
+              ],
 
-            const SizedBox(height: 10),
-            Text(
-              errorMessage,
-              style: const TextStyle(fontSize: 16, color: Colors.black54),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            if (showRetryButton && onRetry != null)
-              ElevatedButton(
-                onPressed: onRetry,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Palette.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 15,
-                  ),
-                ),
-                child: const Text('إعادة المحاولة'),
+              const SizedBox(height: 10),
+              Text(
+                errorMessage,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
+                textAlign: TextAlign.center,
               ),
-          ],
+              const SizedBox(height: 30),
+              if (showRetryButton && onRetry != null)
+                ElevatedButton(
+                  onPressed: onRetry,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Palette.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 15,
+                    ),
+                  ),
+                  child: const Text('إعادة المحاولة'),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -91,3 +93,4 @@ class ShowErrorWidgetView extends StatelessWidget {
     );
   }
 }
+  

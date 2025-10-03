@@ -82,10 +82,20 @@ class AddProductRepository {
     required double price,
     required double rating,
     required double refundRate,
+    required double profitratio,
+
+    required bool ban,
+
     List<int>? photosToDelete,
     List<Uint8List>? newPhotos,
   }) async {
     try {
+      int bann;
+      if (ban == false) {
+        bann = 0;
+      } else {
+        bann = 1;
+      }
       Map<String, dynamic> data = {
         '_method': 'PUT',
         'name': name,
@@ -93,6 +103,8 @@ class AddProductRepository {
         'price': price,
         'rating': rating,
         'refund_rate': refundRate,
+        'profit_ratio': profitratio,
+        'ban': bann,
       };
 
       // إضافة الصور التي سيتم حذفها كقائمة

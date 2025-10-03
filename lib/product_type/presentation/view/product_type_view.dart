@@ -15,6 +15,7 @@ import 'package:buyzoonapp/features/productlist/repo/product_list_repo.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/add_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/delete_product_type_cubit.dart';
 import 'package:buyzoonapp/product_type/presentation/manger/product_type_cubit.dart';
+import 'package:buyzoonapp/product_type/presentation/view/add_product_type_view.dart';
 import 'package:buyzoonapp/product_type/presentation/view/update_product_typ_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,17 +114,6 @@ class _ProductTypesScreenState extends State<ProductTypesScreen> {
               elevation: 0,
             ),
             body: const ProductTypeBodyView(),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.startFloat,
-            floatingActionButton: buildFloatactionBoutton(
-              context,
-              onPressed: () async {
-                AppRoutes.pushNamed(
-                  multiProviderContext,
-                  AppRoutes.addproducttypeview,
-                );
-              },
-            ),
           );
         },
       ),
@@ -143,20 +133,20 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<AddProductTypeCubit, AddProductTypeState>(
-          listener: (context, state) {
-            if (state is AddProductTypeSuccess) {
-              showCustomSnackBar(
-                context,
-                'تمت الإضافة بنجاح',
-                color: Palette.success,
-              );
-              context.read<GetProductTypeCubit>().getProductTypes();
-            } else if (state is AddProductTypeFailure) {
-              showCustomSnackBar(context, state.error, color: Palette.error);
-            }
-          },
-        ),
+        // BlocListener<AddProductTypeCubit, AddProductTypeState>(
+        //   listener: (context, state) {
+        //     if (state is AddProductTypeSuccess) {
+        //       showCustomSnackBar(
+        //         context,
+        //         'تمت الإضافة بنجاح',
+        //         color: Palette.success,
+        //       );
+        //       context.read<GetProductTypeCubit>().getProductTypes();
+        //     } else if (state is AddProductTypeFailure) {
+        //       showCustomSnackBar(context, state.error, color: Palette.error);
+        //     }
+        //   },
+        // ),
         BlocListener<DeleteProductTypeCubit, DeleteProductTypeState>(
           listener: (context, state) {
             if (state is DeleteProductTypeSuccess) {
@@ -206,7 +196,7 @@ class _ProductTypeBodyViewState extends State<ProductTypeBodyView> {
                   builder: (context, deleteState) {
                     if (deleteState is DeleteProductTypeLoading) {
                       return Container(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         child: const Center(child: CircularProgressIndicator()),
                       );
                     }

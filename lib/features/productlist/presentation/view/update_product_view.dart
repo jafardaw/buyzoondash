@@ -39,6 +39,9 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
   late TextEditingController descriptionController;
   late TextEditingController priceController;
   late TextEditingController refundRateController;
+  late TextEditingController profitratioController;
+
+  late bool ban;
 
   // قائمة الصور الأصلية
   late List<ProductPhoto> _currentPhotos;
@@ -62,8 +65,12 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
     refundRateController = TextEditingController(
       text: widget.productModel.refundRate.toString(),
     );
+    profitratioController = TextEditingController(
+      text: widget.productModel.profitratio.toString(),
+    );
     _rating = widget.productModel.rating;
     _currentPhotos = List.from(widget.productModel.productPhotos ?? []);
+    ban = widget.productModel.ban!;
   }
 
   @override
@@ -102,7 +109,9 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
         price: double.parse(priceController.text),
         rating: _rating,
         refundRate: double.parse(refundRateController.text),
+        ban: ban,
         photosToDelete: _photosToDelete,
+        profitratio: double.parse(profitratioController.text),
         newPhotos: _selectedImagesBytes,
       );
     }
@@ -120,7 +129,11 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
           );
           Navigator.pop(context, true);
         } else if (state is UpdateProductFailure) {
-          showCustomSnackBar(context, ' فشل التعديل', color: Palette.error);
+          showCustomSnackBar(
+            context,
+            'فشل التعديل ${state.errorMessage}',
+            color: Palette.error,
+          );
         }
       },
       builder: (context, state) {
@@ -140,6 +153,34 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // ... (باقي الحقول كما هي) ...
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "حالة المنتج",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Switch(
+                        value: !ban, // عكس القيمة
+                        activeThumbColor: Colors.white,
+                        activeTrackColor: Colors.green,
+                        inactiveThumbColor: Colors.white,
+                        inactiveTrackColor: Colors.redAccent,
+                        onChanged: (value) {
+                          setState(() {
+                            ban = !value;
+                            print(ban);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 8),
                   CustomTextField(
                     label: const Text('الاسم'),
                     hintText: 'مثال: هاتف ذكي سامسونج',
@@ -210,6 +251,23 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
                   ),
                   const SizedBox(height: 24),
                   CustomTextField(
+                    label: const Text('نسبة الربح'),
+                    hintText: 'مثال: 0.1.',
+                    controller: profitratioController,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال نسبة الربح';
+                      }
+                      final rate = double.tryParse(value);
+                      if (rate == null || rate < 0 || rate > 1) {
+                        return 'الرجاء إدخال نسبة بين 0 و 1';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  CustomTextField(
                     label: const Text('نسبة الاسترجاع'),
                     hintText: 'مثال: 15.0',
                     controller: refundRateController,
@@ -248,15 +306,25 @@ class _BodyUpdateProductviewState extends State<BodyUpdateProductview> {
                               final photo = _currentPhotos[index];
                               return Stack(
                                 children: [
-                                  Container(
-                                    width: 120,
-                                    margin: const EdgeInsets.only(right: 8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: NetworkImage(photo.photoUrl),
-                                        fit: BoxFit.cover,
-                                      ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      photo.photoUrl,
+                                      width: 120,
+                                      height: 120,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Container(
+                                              width: 120,
+                                              height: 120,
+                                              color: Colors.grey[200],
+                                              child: const Icon(
+                                                Icons.broken_image,
+                                                color: Colors.grey,
+                                              ),
+                                            );
+                                          },
                                     ),
                                   ),
                                   Positioned(

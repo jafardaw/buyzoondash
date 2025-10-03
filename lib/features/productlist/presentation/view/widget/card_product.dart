@@ -160,10 +160,10 @@ class _CardProductState extends State<CardProduct> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.product.price.toStringAsFixed(2),
+                  "السعر الاصلي: ${widget.product.originalprice.toStringAsFixed(2)}",
                   style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.green,
+                    fontSize: 12,
+                    color: Colors.orange,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -178,9 +178,9 @@ class _CardProductState extends State<CardProduct> {
               ],
             ),
             Text(
-              widget.product.price.toStringAsFixed(2),
+              "سعر المبيع: ${widget.product.price.toStringAsFixed(2)}",
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 color: Colors.green,
                 fontWeight: FontWeight.bold,
               ),
@@ -210,19 +210,39 @@ class _CardProductState extends State<CardProduct> {
                     ),
                   ),
                 Spacer(),
+                Chip(
+                  label: Text(
+                    ' الربح: ${widget.product.profit.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  // backgroundColor: const Color.fromARGB(255, 28, 65, 84),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 4,
+                  ),
+                ),
+              ],
+            ),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
                 if (widget.onEdit != null)
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.green),
                     onPressed: widget.onEdit,
                     tooltip: 'تعديل المنتج',
                   ),
-                if (widget.onDelete != null)
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.redAccent),
-                    onPressed: widget.onDelete,
-                    tooltip: 'حذف المنتج',
-                  ),
+                // if (widget.onDelete != null)
+                //   IconButton(
+                //     icon: const Icon(Icons.delete, color: Colors.redAccent),
+                //     onPressed: widget.onDelete,
+                //     tooltip: 'حذف المنتج',
+                //   ),
               ],
             ),
           ],

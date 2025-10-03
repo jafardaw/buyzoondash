@@ -75,135 +75,144 @@ class UserDetailsScreen extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(25.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.person_pin,
-                              size: 100,
-                              color: Palette.primary,
-                            ),
-                            const SizedBox(height: 20),
-                            _buildDetailRow(
-                              icon: Icons.person_outline,
-                              label: 'اسم المستخدم:',
-                              value: user.username,
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.phone_outlined,
-                              label: 'رقم الهاتف:',
-                              value: user.phoneNumber,
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.assignment_ind_outlined,
-                              label: 'ID:',
-                              value: user.id.toString(),
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.shield_outlined,
-                              label: 'موظف:',
-                              value: user.isStaff ? 'نعم' : 'لا',
-                              color: user.isStaff ? Colors.green : Colors.red,
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.vpn_key_outlined,
-                              label: 'مشرف:',
-                              value: user.isSuperuser ? 'نعم' : 'لا',
-                              color: user.isSuperuser
-                                  ? Colors.green
-                                  : Colors.red,
-                            ),
-                            _buildDetailRow(
-                              icon: user.isActive
-                                  ? Icons.check_circle_outline
-                                  : Icons.cancel_outlined,
-                              label: 'الحالة:',
-                              value: user.isActive ? 'مفعل' : 'غير مفعل',
-                              color: user.isActive ? Colors.green : Colors.red,
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.access_time,
-                              label: 'آخر دخول:',
-                              value: user.formattedLastLogin,
-                            ),
-                            _buildDetailRow(
-                              icon: Icons.calendar_today_outlined,
-                              label: 'تاريخ الإنشاء:',
-                              value: user.formattedCreatedAt,
-                            ),
-                            const SizedBox(height: 20),
-                            // زر الحذف داخل الـ Card
-                            SizedBox(
-                              width: double.infinity,
-                              child: BlocBuilder<DeleteUserCubit, DeleteUserState>(
-                                builder: (context, deleteState) {
-                                  return ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 15,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    onPressed: deleteState is DeleteUserLoading
-                                        ? null
-                                        : () {
-                                            showCustomAlertDialog(
-                                              context: context,
-                                              title: 'تأكيد الحذف',
-                                              content:
-                                                  'هل أنت متأكد من حذف المستخدم ${user.username}؟',
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: const Text('إلغاء'),
-                                                ),
-                                                ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        foregroundColor:
-                                                            Colors.white,
-                                                      ),
-                                                  onPressed: () {
-                                                    context
-                                                        .read<DeleteUserCubit>()
-                                                        .deleteUser(
-                                                          userId: userId,
-                                                        );
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: const Text('حذف'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                    icon: deleteState is DeleteUserLoading
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                              strokeWidth: 2,
-                                            ),
-                                          )
-                                        : const Icon(Icons.delete),
-                                    label: Text(
-                                      deleteState is DeleteUserLoading
-                                          ? 'جاري الحذف...'
-                                          : 'حذف المستخدم',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  );
-                                },
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.person_pin,
+                                size: 100,
+                                color: Palette.primary,
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 20),
+                              _buildDetailRow(
+                                icon: Icons.person_outline,
+                                label: 'اسم المستخدم:',
+                                value: user.username,
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.phone_outlined,
+                                label: 'رقم الهاتف:',
+                                value: user.phoneNumber,
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.assignment_ind_outlined,
+                                label: 'ID:',
+                                value: user.id.toString(),
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.shield_outlined,
+                                label: 'موظف:',
+                                value: user.isStaff ? 'نعم' : 'لا',
+                                color: user.isStaff ? Colors.green : Colors.red,
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.vpn_key_outlined,
+                                label: 'مشرف:',
+                                value: user.isSuperuser ? 'نعم' : 'لا',
+                                color: user.isSuperuser
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                              _buildDetailRow(
+                                icon: user.isActive
+                                    ? Icons.check_circle_outline
+                                    : Icons.cancel_outlined,
+                                label: 'الحالة:',
+                                value: user.isActive ? 'مفعل' : 'غير مفعل',
+                                color: user.isActive
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.access_time,
+                                label: 'آخر دخول:',
+                                value: user.formattedLastLogin,
+                              ),
+                              _buildDetailRow(
+                                icon: Icons.calendar_today_outlined,
+                                label: 'تاريخ الإنشاء:',
+                                value: user.formattedCreatedAt,
+                              ),
+                              const SizedBox(height: 20),
+                              // زر الحذف داخل الـ Card
+                              SizedBox(
+                                width: double.infinity,
+                                child: BlocBuilder<DeleteUserCubit, DeleteUserState>(
+                                  builder: (context, deleteState) {
+                                    return ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 15,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed:
+                                          deleteState is DeleteUserLoading
+                                          ? null
+                                          : () {
+                                              showCustomAlertDialog(
+                                                context: context,
+                                                title: 'تأكيد الحذف',
+                                                content:
+                                                    'هل أنت متأكد من حذف المستخدم ${user.username}؟',
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const Text('إلغاء'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    style:
+                                                        ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          foregroundColor:
+                                                              Colors.white,
+                                                        ),
+                                                    onPressed: () {
+                                                      context
+                                                          .read<
+                                                            DeleteUserCubit
+                                                          >()
+                                                          .deleteUser(
+                                                            userId: userId,
+                                                          );
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('حذف'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                      icon: deleteState is DeleteUserLoading
+                                          ? const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                                strokeWidth: 2,
+                                              ),
+                                            )
+                                          : const Icon(Icons.delete),
+                                      label: Text(
+                                        deleteState is DeleteUserLoading
+                                            ? 'جاري الحذف...'
+                                            : 'حذف المستخدم',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
